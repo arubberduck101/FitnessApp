@@ -1,6 +1,6 @@
-# intro_to_flutter
+# Fitness_Application
 
-A new Flutter project.
+A new project using flutter
 
 ## Getting Started
 
