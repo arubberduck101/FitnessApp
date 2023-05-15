@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intro_to_flutter/login_screen.dart';
+import 'package:intro_to_flutter/home_screen.dart';
 //do this one.
 
 class SignupScreen extends StatefulWidget {
@@ -13,6 +15,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
   String _email = '';
   String _password = '';
+
+  void _handleLogin() {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +76,23 @@ class _SignupScreenState extends State<SignupScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Signup Successful')));
                   }
+
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => HomeScreen()));
                 },
                 child: Text('Signup'),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: 10),
+                  TextButton(
+                    onPressed: _handleLogin,
+                    child: Text("Have an account? Login"),
+                  ),
+                ],
               ),
             ],
           ),

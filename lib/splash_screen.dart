@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
 import 'signup_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  // Navigate to the Login In
+
+  void init() async {
+      // wait 2 seconds , and then we're going to render the LoginPage
+      await Future.delayed(const Duration(seconds: 5)).then((value) {
+       Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => SignupScreen()));
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +41,11 @@ class SplashScreen extends StatelessWidget {
                 width: 180,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("images/fitnessapp.png"),
+                    image: AssetImage("images/fitnessappimage.png"),
                   ),
                 ),
               ),
-             
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to Signup Screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignupScreen()),
-                  );
-                },
-                child: Text('Sign up'),
-              ),
             ],
           ),
         ),
