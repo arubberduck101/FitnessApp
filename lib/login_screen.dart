@@ -1,89 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/signup_screen.dart';
-import 'package:intro_to_flutter/home_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen();
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _handleLogin() {
-    // Implement your login logic here
-  }
-
-  void _handleRegister() {
-    // Implement your register logic here
-  }
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        // backgroundColor: Color.fromARGB(255, 239, 239, 239)),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 180,
-                width: 180,
-                
-              ),
-              SizedBox(height: 50),
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  hintText: "Username",
-                ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: "Password",
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => {
-                    Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (BuildContext context) => HomeScreen()))
-                    },
-                    
-                    
-                    child: Text("Login"),
-                  ),
-                  SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () => {
-                      Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (BuildContext context) => SignupScreen()))
-                    },
-                    child: const Text("Need an account? Register"),
-                  ),
-                ],
-              ),
-            ],
+    return Scaffold(
+      body: ListView(
+        padding: const EdgeInsets.all(8.0),
+        children: <Widget>[
+          const SizedBox(
+            height: 50,
           ),
-        ),
+          const Text(
+            "Exercise App",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: LoginForm(),
+          ),
+        ],
       ),
     );
   }
 }
+
+class LoginForm extends StatefulWidget {
+  LoginForm({Key? key}) : super(key: key);
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  String? email;
+  String? password;
+
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.email_outlined),
+              labelText: "Email",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(100.0)),
+              )
+              
+            )
+          )
+        ]
+        
+      ),
+    );
+  }
+}
+// are you ok
+// I am soooo hungary 

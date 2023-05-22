@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-import 'signup_screen.dart';
+// import 'signup_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // wait 2 seconds , and then we're going to render the LoginPage
       await Future.delayed(const Duration(seconds: 5)).then((value) {
        Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => SignupScreen()));
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
     });
 
   }
