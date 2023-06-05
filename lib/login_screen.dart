@@ -53,16 +53,47 @@ class _LoginFormState extends State<LoginForm> {
               prefixIcon: Icon(Icons.email_outlined),
               labelText: "Email",
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                  ),
               )
               
             )
-          )
+          ),
+
+          SizedBox(
+            height: 20,
+          ),
+          // password
+          TextFormField(
+            //intialValue: "input text"
+            decoration: const InputDecoration(
+              
+              labelText: "Password",
+              prefixIcon: Icon(Icons.lock_outline),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                  ),
+              ),
+              
+            ),
+            validator: (value)  {
+              if(value!.isEmpty){
+                return "Please Enter your email";
+              }
+            }
+          ),
+          
         ]
-        
-      ),
-    );
+          
+        )
+      );
+
   }
+}
+
+class SizeBox {
 }
 // are you ok
 // I am soooo hungary 
