@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -42,6 +42,19 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _obscureText = true;
 
+  Future<void> _login() async {
+  if (_formKey.currentState!.validate()) {
+    _formKey.currentState!.save();
+    try{
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
+      print("Sucessful login");
+    }
+    catch(e){
+      print("login error");
+    }
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -56,9 +69,19 @@ class _LoginFormState extends State<LoginForm> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(100.0),
                   ),
-              )
+              ),
               
-            )
+            ),
+             validator: (value)  {
+              if(value!.isEmpty){
+                return "Please Enter your email";
+              }
+              return null;
+            },
+            onSaved: (val) {
+              email = val;
+             
+            }
           ),
 
           SizedBox(
@@ -78,22 +101,59 @@ class _LoginFormState extends State<LoginForm> {
               ),
               
             ),
-            validator: (value)  {
-              if(value!.isEmpty){
-                return "Please Enter your email";
+           obscureText: _obscureText,
+
+           validator: (value) {
+              if (value!.isEmpty) {
+                return "Please enter your password";
               }
-            }
+              return null;
+            },
+            onSaved: (val) {
+              password = val;
+            },
           ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                 _obscureText = false;
+              });
+             
+            },
+             child: Text("Show Password")),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                 _obscureText = true;
+              });
+             
+            },
+             child: Text("Hide Password")),
+             
+             
+            SizedBox(
+             height: 40,),
+             
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          ElevatedButton(
+            onPressed: () {
+            debugPrint("signup");
+            },
+            child: Text("No account? Signup here")),
+
+          ElevatedButton(
+            onPressed: () async {
+              await _login();
+            },
+            child: Text("Login")),
+        ])
+        ],
           
-        ]
-          
-        )
+        ),
       );
 
   }
 }
-
-class SizeBox {
-}
-// are you ok
-// I am soooo hungary 
