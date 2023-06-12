@@ -133,15 +133,16 @@ class _LoginFormState extends State<LoginForm> {
              
             SizedBox(
              height: 40,),
-             Text("Hi"),
+             
 
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
           ElevatedButton(
             onPressed: () {
-
+            debugPrint("signup");
             },
-            child: Text("Sign Up")),
+            child: Text("No account? Signup here")),
 
           ElevatedButton(
             onPressed: () async {
