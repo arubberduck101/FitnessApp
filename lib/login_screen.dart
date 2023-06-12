@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -40,6 +40,19 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _obscureText = true;
 
+  Future<void> _login() async {
+  if (_formKey.currentState!.validate()) {
+    _formKey.currentState!.save();
+    try{
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
+      print("Sucessful login");
+    }
+    catch(e){
+      print("login error");
+    }
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -57,17 +70,22 @@ class _LoginFormState extends State<LoginForm> {
                   borderRadius: BorderRadius.all(
                     Radius.circular(100.0),
                   ),
-                ),
+
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please enter your email";
-                }
-                return null;
-              },
-              onSaved: (val) {
-                email = val;
-              }),
+              
+            ),
+             validator: (value)  {
+              if(value!.isEmpty){
+                return "Please Enter your email";
+              }
+              return null;
+            },
+            onSaved: (val) {
+              email = val;
+             
+            }
+          ),
+
 
           SizedBox(
             height: 20,
@@ -135,5 +153,6 @@ SizedBox(
     ]
     )
     );
+
   }
 }
