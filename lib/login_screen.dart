@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'home_screen.dart';
+import 'signup_screen.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -41,118 +45,118 @@ class _LoginFormState extends State<LoginForm> {
   bool _obscureText = true;
 
   Future<void> _login() async {
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
-    try{
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
-      print("Sucessful login");
-    }
-    catch(e){
-      print("login error");
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email!, password: password!);
+        print("Sucessful login");
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+      } catch (e) {
+        print("Login error: ${e.toString()}");
+      }
     }
   }
-}
+
+  void _goToSignUpScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignupScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          // email
-          TextFormField(
-              // initialValue: 'Input text',
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.email_outlined),
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(100.0),
+        key: _formKey,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              // email
+              TextFormField(
+                  // initialValue: 'Input text',
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email_outlined),
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(100.0),
+                      ),
+                    ),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter your email";
+                    }
+                    return null;
+                  },
+                  onSaved: (val) {
+                    email = val;
+                  }),
 
+              SizedBox(
+                height: 20,
               ),
-              
-            ),
-             validator: (value)  {
-              if(value!.isEmpty){
-                return "Please Enter your email";
-              }
-              return null;
-            },
-            onSaved: (val) {
-              email = val;
-             
-            }
-          ),
+              // password
+              TextFormField(
+                  // initialValue: 'Input text',
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(100.0),
+                      ),
+                    ),
+                  ),
+                  obscureText: _obscureText,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter your password";
+                    }
+                    return null;
+                  },
+                  onSaved: (val) {
+                    password = val;
+                  }),
 
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = false;
+                    });
+                  },
+                  child: Text("Show Password")),
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = true;
+                    });
+                  },
+                  child: Text("Hide Password")),
 
-          SizedBox(
-            height: 20,
-          ),
-          // password
-          TextFormField(
-            // initialValue: 'Input text',
-            decoration: InputDecoration(
-              labelText: 'Password',
-              prefixIcon: const Icon(Icons.lock_outline),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(100.0),
+              SizedBox(
+                height: 40,
+              ),
+              SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _goToSignUpScreen,
+                      child: Text("Sign up"),
+                    ),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed:
+                          _login, // Calling _login method for login button
+                      child: Text("Login"),
+                    ),
+                  ],
                 ),
               ),
-            ),
-
-            obscureText: _obscureText,
-          ),
-
-          ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _obscureText = false;
-                });
-              },
-              child: Text("Show Password")),
-          ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _obscureText = true;
-                });
-              },
-              child: Text("Hide Password")),
-
-SizedBox(
-  height: 40,
-),
-SizedBox(
-  height: 40,
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.center, 
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          setState(() {
-            _obscureText = true;
-          });
-        },
-        child: Text("Sign up"),
-      ),
-      SizedBox(width: 10), 
-      ElevatedButton(
-        onPressed: () {
-          setState(() {
-            _obscureText = true;
-          });
-        },
-        child: Text("Login"),
-      ),
-    ],
-  ),
-),
-
-    ]
-    )
-    );
-
+            ]));
   }
 }
