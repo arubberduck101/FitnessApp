@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/signup_screen.dart';
+import 'exercise_screen.dart';
+import 'food_screen.dart';
+import 'log_screen.dart';
 import 'learn_screen.dart';
 import 'profile_screen.dart';
-import 'log_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen();
@@ -14,30 +15,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
+  final List<Widget> _pages = [
+    HomePage(),
+    LogPage(),
+    LearnPage(),
+    ProfilePage(),
+  ];
+
+  final List<String> _appBarTitles = [
+    'Home',
+    'Log',
+    'Learn',
+    'Profile',
+  ];
+
   void _onItemTapped(int index) {
-    if (_selectedIndex == index) {
-      return; // Do nothing if already on the selected page
-    }
-
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    if (index == 0) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    }
-    if (index == 1) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LogPage()));
-    }
-    if (index == 2) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LearnPage()));
-    }
-    if (index == 3) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ProfilePage()));
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    } else {
+      NavigationService.navigateToAndRemoveUntil(_pages[_selectedIndex]);
     }
   }
 
@@ -45,41 +43,79 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text(_appBarTitles[_selectedIndex]),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DashboardSection(),
-            StatusSection(),
-            RecommendationSection(),
+      body: Navigator(
+        key: NavigationService.navigatorKey,
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute(builder: (BuildContext context) {
+            return _pages[_selectedIndex];
+          });
+        },
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.blue, // Set the desired canvas color to blue
+        ),
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              label: 'Log',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.lightbulb),
+              label: 'Learn',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
           ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped, // Set the fixed color to blue
+          unselectedItemColor: Colors.white,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Log',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb),
-            label: 'Learn',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+    );
+  }
+}
+
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  static void navigateTo(Widget destination) {
+    navigatorKey.currentState
+        ?.push(MaterialPageRoute(builder: (_) => destination));
+  }
+
+  static void navigateToReplacement(Widget destination) {
+    navigatorKey.currentState
+        ?.pushReplacement(MaterialPageRoute(builder: (_) => destination));
+  }
+
+  static void navigateToAndRemoveUntil(Widget destination) {
+    navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => destination),
+        (Route<dynamic> route) => false);
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DashboardSection(),
+          StatusSection(),
+          RecommendationSection(),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.black,
-        onTap: _onItemTapped,
       ),
     );
   }
@@ -89,8 +125,8 @@ class DashboardSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
+      padding: const EdgeInsets.all(16.0),
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -112,8 +148,8 @@ class StatusSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
+      padding: const EdgeInsets.all(16.0),
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -135,8 +171,8 @@ class RecommendationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
+      padding: const EdgeInsets.all(16.0),
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
