@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import 'login_page.dart';
 // import 'signup_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,19 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   // Navigate to the Login In
 
   void init() async {
-      // wait 2 seconds , and then we're going to render the LoginPage
-      await Future.delayed(const Duration(seconds: 5)).then((value) {
-       Navigator.pushReplacement(context,
+    // wait 2 seconds , and then we're going to render the LoginPage
+    await Future.delayed(const Duration(seconds: 5)).then((value) {
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color.fromARGB(129, 6, 123, 26),
+        backgroundColor: Color.fromARGB(255, 215, 208, 183),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 180,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("images/fitnessappimage.png"),
+                    image: AssetImage("assets/images/fitnessappimage.png"),
                   ),
                 ),
               ),

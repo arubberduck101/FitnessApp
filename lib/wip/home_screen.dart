@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'exercise_screen.dart';
-import 'food_screen.dart';
+import '../core_app_pages/exercise_screen.dart';
+import '../core_app_pages/food_screen.dart';
 import 'log_screen.dart';
-import 'learn_screen.dart';
-import 'profile_screen.dart';
+import '../core_app_pages/learn_screen.dart';
+import '../core_app_pages/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen();
@@ -78,7 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped, // Set the fixed color to blue
+          backgroundColor: Colors.blue,
+          selectedItemColor: Colors.blue[700],
           unselectedItemColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/signup_screen.dart';
-import 'splash_screen.dart';
-import 'signup_screen.dart';
+import 'package:intro_to_flutter/wip/signup_page.dart';
+import 'auth_pages/splash_screen.dart';
+import 'wip/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Excerise Project",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color.fromARGB(129, 6, 123, 26),
       ),
       home: const SplashScreen(),
     );

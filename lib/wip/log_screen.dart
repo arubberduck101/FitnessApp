@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/home_screen.dart';
+import 'package:intro_to_flutter/wip/home_screen.dart';
 
-import 'food_screen.dart';
-import 'exercise_screen.dart';
+import '../core_app_pages/food_screen.dart';
+import '../core_app_pages/exercise_screen.dart';
 
 class LogPage extends StatefulWidget {
   const LogPage({super.key});

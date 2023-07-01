@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/login_screen.dart';
-import 'package:intro_to_flutter/home_screen.dart';
+import 'package:intro_to_flutter/auth_pages/login_page.dart';
+import 'package:intro_to_flutter/wip/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 //do this one.
