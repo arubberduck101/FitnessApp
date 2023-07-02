@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../wip/home_screen2.dart';
+import '../wip/signup.dart';
 import '../wip/signup_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -85,10 +86,10 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void _goToSignUpScreen() {
+  void _goToSignUpPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SignupScreen()),
+      MaterialPageRoute(builder: (context) => Signup()),
     );
   }
 
@@ -112,6 +113,19 @@ class _LoginFormState extends State<LoginForm> {
                   Radius.circular(100.0),
                 ),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 65, 117, 33),
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
             ),
             validator: (value) {
               if (value!.isEmpty) {
@@ -128,49 +142,64 @@ class _LoginFormState extends State<LoginForm> {
 
           // password
           TextFormField(
-              // initialValue: 'Input text',
-              decoration: InputDecoration(
-                fillColor: Color.fromARGB(50, 96, 93, 83),
-                filled: true,
-                hintText: 'Password',
-                prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility,
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
+            // initialValue: 'Input text',
+            decoration: InputDecoration(
+              fillColor: Color.fromARGB(50, 96, 93, 83),
+              filled: true,
+              hintText: 'Password',
+              prefixIcon: const Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: Color.fromARGB(255, 65, 117, 33),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(100.0),
-                  ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
                 ),
               ),
-              obscureText: _obscureText,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please Enter your password";
-                }
-                return null;
-              },
-              onSaved: (val) {
-                password = val;
-              }),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 65, 117, 33),
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+            ),
+            obscureText: _obscureText,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please Enter your password";
+              }
+              return null;
+            },
+            onSaved: (val) {
+              password = val;
+            },
+          ),
 
           SizedBox(height: 40.0),
 
           Container(
-            width:
-                double.infinity, // Set the width to occupy the available space
+            height: 40,
+            width: double.infinity,
             child: ElevatedButton(
               onPressed: _login,
               child: Text('Login'),
               style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 65, 117, 33),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                       100.0), // Set the same border radius as the text field
@@ -180,6 +209,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
 
           SizedBox(height: 20.0),
+
           RichText(
             text: TextSpan(
               text: 'Don\'t have an account? ',
@@ -190,10 +220,10 @@ class _LoginFormState extends State<LoginForm> {
                 TextSpan(
                   text: 'Sign Up',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Color.fromARGB(255, 65, 117, 33),
                     fontWeight: FontWeight.bold,
                   ),
-                  recognizer: TapGestureRecognizer()..onTap = _goToSignUpScreen,
+                  recognizer: TapGestureRecognizer()..onTap = _goToSignUpPage,
                 ),
               ],
             ),

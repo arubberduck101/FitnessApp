@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../auth_pages/login_page.dart';
 
@@ -10,72 +14,77 @@ class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFE7A563),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(50.0),
-            bottomRight: Radius.circular(50.0),
-          ),
-        ),
-        toolbarHeight: 180,
-        flexibleSpace: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: const Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Icon(Icons.arrow_back),
-              ),
-            ),
-            Center(
-              child: Container(
-                height: 85,
-                width: 110,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/fitnessappimage.png'),
-                      fit: BoxFit.cover),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            SizedBox(height: 50),
-            const Text('Exercise APP',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SignupForm(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                children: <Widget>[
-                  Text('Already here  ?',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(' Get Logged in Now!',
-                        style: TextStyle(fontSize: 20, color: Colors.blue)),
-                  )
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: Color(0xFFE7A563),
+      //   shape: const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.only(
+      //       bottomLeft: Radius.circular(50.0),
+      //       bottomRight: Radius.circular(50.0),
+      //     ),
+      //   ),
+      //   toolbarHeight: 180,
+      //   flexibleSpace: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       GestureDetector(
+      //         onTap: () => Navigator.pop(context),
+      //         child: const Padding(
+      //           padding: EdgeInsets.only(left: 10.0),
+      //           child: Icon(Icons.arrow_back),
+      //         ),
+      //       ),
+      //       Center(
+      //         child: Container(
+      //           height: 85,
+      //           width: 110,
+      //           decoration: const BoxDecoration(
+      //             image: DecorationImage(
+      //                 image: AssetImage('assets/images/fitnessappimage.png'),
+      //                 fit: BoxFit.cover),
+      //           ),
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // ),
+
+      body: Container(
+        color: Color.fromARGB(255, 215, 208, 183),
+        padding: EdgeInsets.all(20.0),
+        child: Center(
+          child: Container(
+            child: Center(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(vertical: 20.0),
+                children: [
+                  Image.asset(
+                    'assets/images/fitnessappimage.png',
+                    width: 250,
+                    height: 250,
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    "Sign Up",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 96, 93, 83),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: SignupForm(),
+                  ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -101,15 +110,110 @@ class _SignupFormState extends State<SignupForm> {
 
   final pass = new TextEditingController();
 
+  Future<void> _signup() async {
+    if (agree) {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        // try {
+        //   if (agree) {
+        //     UserCredential userCredential = await FirebaseAuth.instance
+        //         .createUserWithEmailAndPassword(
+        //             email: email!, password: password!);
+        //     print("Sucessful login");
+        //     Navigator.pushReplacement(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: (BuildContext context) => LoginPage()));
+        //   }
+        // } catch (e) {
+        //   print("Login error: ${e.toString()}");
+        // }
+        try {
+          final UserCredential userCredential = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+                  email: email!, password: password!);
+          print("Successful");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => LoginPage(),
+            ),
+          );
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'email-already-in-use' ||
+              e.code == 'invalid-email' ||
+              e.code == 'weak-password') {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Invalid Input'),
+                  content: Text(e.message ?? 'An error occured.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Ok'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        }
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Accept Policy'),
+            content: Text(
+                'Please read Terms of Service and Privacy Policy and confirm.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void _passInvalid() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Password Invalid'),
+          content: Text('Passwords do not match. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _goToLoginPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.all(
-        const Radius.circular(100.0),
-      ),
-    );
-
-    var space = SizedBox(height: 10);
     return Form(
       key: _formKey,
       child: Column(
@@ -117,9 +221,31 @@ class _SignupFormState extends State<SignupForm> {
           // email
           TextFormField(
             decoration: InputDecoration(
-                prefixIcon: Icon(Icons.email_outlined),
-                labelText: 'Email',
-                border: border),
+              fillColor: Color.fromARGB(50, 96, 93, 83),
+              filled: true,
+              prefixIcon: Icon(
+                Icons.email_outlined,
+              ),
+              hintText: 'Email',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 65, 117, 33),
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+            ),
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter some text';
@@ -132,15 +258,36 @@ class _SignupFormState extends State<SignupForm> {
             keyboardType: TextInputType.emailAddress,
           ),
 
-          space,
+          SizedBox(height: 20.0),
 
           // password
           TextFormField(
             controller: pass,
             decoration: InputDecoration(
-              labelText: 'Password',
-              prefixIcon: Icon(Icons.lock_outline),
-              border: border,
+              fillColor: Color.fromARGB(50, 96, 93, 83),
+              filled: true,
+              hintText: 'Password',
+              prefixIcon: Icon(
+                Icons.lock_outline,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 65, 117, 33),
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -158,28 +305,53 @@ class _SignupFormState extends State<SignupForm> {
             obscureText: !_obscureText,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter some text';
+                return 'Field empty. Please fill out.';
               }
               return null;
             },
           ),
-          space,
+          SizedBox(height: 20.0),
           // confirm passwords
           TextFormField(
             decoration: InputDecoration(
-              labelText: 'Confirm Password',
-              prefixIcon: Icon(Icons.lock_outline),
-              border: border,
+              fillColor: Color.fromARGB(50, 96, 93, 83),
+              filled: true,
+              hintText: 'Confirm Password',
+              prefixIcon: Icon(
+                Icons.lock_outline,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 65, 117, 33),
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
             ),
             obscureText: true,
             validator: (value) {
               if (value != pass.text) {
-                return 'password not match';
+                _passInvalid();
+                return 'Passwords do not match.';
+              }
+              if (value!.isEmpty) {
+                return 'Field empty. Please fill out.';
               }
               return null;
             },
           ),
-          space,
+          SizedBox(height: 20.0),
           // name
 
           Row(
@@ -207,41 +379,78 @@ class _SignupFormState extends State<SignupForm> {
           ),
 
           // signUP button
-          SizedBox(
-            height: 50,
+          // SizedBox(
+          //   height: 40,
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       // comment this block after you setup the Firebase
+          //       Navigator.pushReplacement(context,
+          //           MaterialPageRoute(builder: (context) => LoginPage()));
+
+          //       //uncomment this block after you set up the Firebase
+          //       // if (_formKey.currentState!.validate()) {
+          //       //   _formKey.currentState!.save();
+          //       //
+          //       //   AuthenticationHelper()
+          //       //       .signUp(email: email!, password: password!)
+          //       //       .then((result) {
+          //       //     if (result == null) {
+          //       //       Navigator.pushReplacement(context,
+          //       //           MaterialPageRoute(builder: (context) => RoutePage()));
+          //       //     } else {
+          //       //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //       //         content: Text(
+          //       //           result,
+          //       //           style: TextStyle(fontSize: 16),
+          //       //         ),
+          //       //       ));
+          //       //     }
+          //       //   });
+          //       // }
+          //     },
+          //     style: ElevatedButton.styleFrom(
+          //         backgroundColor: Color.fromARGB(255, 65, 117, 33),
+          //         shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.all(Radius.circular(24.0)))),
+          //     child: Text('Sign Up'),
+          //   ),
+          // ),
+
+          Container(
+            height: 40,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // comment this block after you setup the Firebase
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-
-                //uncomment this block after you set up the Firebase
-                // if (_formKey.currentState!.validate()) {
-                //   _formKey.currentState!.save();
-                //
-                //   AuthenticationHelper()
-                //       .signUp(email: email!, password: password!)
-                //       .then((result) {
-                //     if (result == null) {
-                //       Navigator.pushReplacement(context,
-                //           MaterialPageRoute(builder: (context) => RoutePage()));
-                //     } else {
-                //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                //         content: Text(
-                //           result,
-                //           style: TextStyle(fontSize: 16),
-                //         ),
-                //       ));
-                //     }
-                //   });
-                // }
-              },
+              onPressed: _signup,
+              child: Text('Signup'),
               style: ElevatedButton.styleFrom(
-                  // backgroundColor: Color(0xFFE7A563),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(24.0)))),
-              child: Text('Sign Up'),
+                backgroundColor: Color.fromARGB(255, 65, 117, 33),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      100.0), // Set the same border radius as the text field
+                ),
+              ),
+            ),
+          ),
+
+          SizedBox(height: 20.0),
+
+          RichText(
+            text: TextSpan(
+              text: 'Already have an account? ',
+              style: TextStyle(
+                color: Color.fromARGB(255, 96, 93, 83),
+              ),
+              children: [
+                TextSpan(
+                  text: 'Login',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 65, 117, 33),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  recognizer: TapGestureRecognizer()..onTap = _goToLoginPage,
+                ),
+              ],
             ),
           ),
         ],
