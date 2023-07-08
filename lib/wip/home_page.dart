@@ -1,45 +1,38 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/core_app_pages/exercise_screen.dart';
-import '../core_app_pages/food_screen.dart';
 
-class LogPage2 extends StatefulWidget {
-  const LogPage2({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<LogPage2> createState() => _LogPage2State();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _LogPage2State extends State<LogPage2> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Advice
+            // Dashboard
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FoodPage()));
-                },
+                onTap: () {},
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Container(
                         height: 150,
-                        color: Colors.blue,
+                        color: Color.fromARGB(255, 65, 117, 33),
                       ),
                     ),
                     Positioned(
                       bottom: 5.0,
                       right: 15.0,
                       child: Text(
-                        'Food',
+                        'Dashboard',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40.0,
@@ -51,7 +44,7 @@ class _LogPage2State extends State<LogPage2> {
                       top: 10.0,
                       left: 10.0,
                       child: Icon(
-                        Icons.food_bank_rounded,
+                        Icons.notes_rounded,
                         size: 130.0,
                         color: Colors.white,
                       ),
@@ -60,27 +53,26 @@ class _LogPage2State extends State<LogPage2> {
                 ),
               ),
             ),
+
+            // Status
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ExercisePage()));
-                },
+                onTap: () {},
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Container(
                         height: 150,
-                        color: Colors.blue,
+                        color: Color.fromARGB(255, 65, 117, 33),
                       ),
                     ),
                     Positioned(
                       bottom: 5.0,
                       right: 15.0,
                       child: Text(
-                        'Exercises',
+                        'Status',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40.0,
@@ -92,7 +84,47 @@ class _LogPage2State extends State<LogPage2> {
                       top: 10.0,
                       left: 10.0,
                       child: Icon(
-                        Icons.sports_gymnastics,
+                        Icons.notes_rounded,
+                        size: 130.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Recommendations
+            Padding(
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        height: 150,
+                        color: Color.fromARGB(255, 65, 117, 33),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 5.0,
+                      right: 15.0,
+                      child: Text(
+                        'Recommendations',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 10.0,
+                      left: 10.0,
+                      child: Icon(
+                        Icons.notes_rounded,
                         size: 130.0,
                         color: Colors.white,
                       ),

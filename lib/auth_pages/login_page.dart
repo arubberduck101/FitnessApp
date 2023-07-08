@@ -4,8 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../wip/home_screen2.dart';
-import '../wip/signup.dart';
+import '../wip/home_screen.dart';
 import '../wip/signup_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -79,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
             .signInWithEmailAndPassword(email: email!, password: password!);
         print("Sucessful login");
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
       } catch (e) {
         print("Login error: ${e.toString()}");
       }

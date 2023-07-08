@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/wip/signup_page.dart';
 import 'auth_pages/splash_screen.dart';
-import 'wip/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
