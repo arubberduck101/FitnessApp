@@ -1,3 +1,9 @@
+// CURRENTLY WORKING ON THIS DO NOT TOUCH
+
+// ignore_for_file: prefer_const_constructors
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FoodPage extends StatefulWidget {
@@ -8,71 +14,230 @@ class FoodPage extends StatefulWidget {
 }
 
 class _FoodPageState extends State<FoodPage> {
-  // CameraImage? _cameraImage;
-  // CameraController? _cameraController;
-  // bool _isDetecting = false;
-  // String _result = '';
+  String? dropdownValue1;
+  String? dropdownValue2;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initalizeCamera();
-  //   loadModel();
-  // }
+  final List<String> mealtime = [
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+  ];
 
-  // Future<void> initializeCamera() async {
-  //   final cameras = await availableCameras();
-  //   final frontCamera = cameras.firstWhere(
-  //       (camera) => camera.lensDirection == CameraLensDirection.front);
+  // Find an API with a food database to reference from
+  final List<String> food = [
+    'Banana',
+    'Apple',
+    'Chocolate',
+    'etc.',
+  ];
 
-  //   _cameraController = CameraController(
-  //     frontCamera,
-  //     ResolutionPreset.high,
-  //   );
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('Users');
 
-  //   await _cameraController!.initialize();
+  void submitToFirestore() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      print('Not authenticated user.');
+      return;
+    }
 
-  //   _cameraController!.startImageStream((CameraImage) {
-  //     if (_isDetecting) return;
+    if (dropdownValue1 == null || dropdownValue2 == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Missing Fields'),
+            content: Text('Please fill out all the fields.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
 
-  //     _isDetecting = true;
-  //     processCameraImage(image);
-  //   });
-  // }
+    final userID = currentUser.uid;
 
-  // Future loadModel() async {
-  //   Tflite.close();
-  //   await Tflite.loadModel(
-  //       model: "assets/ssd_mobilenet.tflite",
-  //       labels: "assets/ssd_mobilenet.txt");
-  // }
+    final Map<String, dynamic> foodData = {
+      'Meal Time': dropdownValue1,
+      'Food': dropdownValue2,
+      'Portion Size': selectedGrams,
+      // 'Calories': selectedCalories,
+    };
 
-  // Future<void> processCameraImage(CameraImage image) async {
-  //   if (_cameraController == null) return;
+    try {
+      usersCollection.doc(userID).set(
+        {'Diet': foodData},
+        SetOptions(merge: true),
+      );
+      print("Values updated to Firestore successfully!");
+      Navigator.pop(context);
+    } catch (e) {
+      print("Failed to update values to Firestore.");
+    }
+  }
 
-  //   final img.Image rotatedImage = _rotateImage(
-  //     img.copyRotate(
-  //       img.Image.fromBytes(
-  //         image.width,
-  //         image.height,
-  //         image.planes[0].bytes,
-  //         format: img.Format.bgra,
-  //       ),
-  //       90,
-  //     ),
-  //   );
+  TextEditingController _calorieController = TextEditingController();
 
-  //   final recognitionResult = await Tflite.runModelOnImage(
-  //     path: imagePath,
-  //   )
+  int selectedGrams = 0;
+  int selectedCalories = 0;
+  FixedExtentScrollController gramScrollController =
+      FixedExtentScrollController(initialItem: 0);
+  FixedExtentScrollController calorieScrollController =
+      FixedExtentScrollController(initialItem: 0);
 
-  // }
+  @override
+  void initState() {
+    super.initState();
+    gramScrollController =
+        FixedExtentScrollController(initialItem: selectedGrams);
+    calorieScrollController =
+        FixedExtentScrollController(initialItem: selectedCalories);
+  }
+
+  @override
+  void dispose() {
+    gramScrollController.dispose();
+    calorieScrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text('This is going to be our food page'),
+      appBar: AppBar(
+        title: Text("Exercises"),
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+      ),
+      body: Center(
+        child: Container(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Meal Time",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              DropdownButton<String>(
+                value: dropdownValue1,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue1 = newValue!;
+                  });
+                },
+                items: mealtime.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                "Select Food",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              DropdownButton<String>(
+                value: dropdownValue2,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue2 = newValue!;
+                  });
+                },
+                items: food.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                'Portion Size',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+              Container(
+                height: 100,
+                child: ListWheelScrollView(
+                  controller: gramScrollController,
+                  itemExtent: 40,
+                  diameterRatio: 1.5,
+                  physics: FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      selectedGrams = index;
+                      print('Grams: $selectedGrams');
+                    });
+                  },
+                  children: List.generate(101, (index) {
+                    return Text(
+                      '$index',
+                    );
+                  }),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                'Calories Consumed',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+              TextField(
+                controller: _calorieController,
+                decoration: InputDecoration(
+                  hintText: 'Enter Calories Consumed',
+                ),
+              ),
+              // Container(
+              //   height: 100,
+              //   child: ListWheelScrollView(
+              //     controller: calorieScrollController,
+              //     itemExtent: 40,
+              //     diameterRatio: 1.5,
+              //     physics: FixedExtentScrollPhysics(),
+              //     onSelectedItemChanged: (index) {
+              //       setState(() {
+              //         selectedCalories = index;
+              //         print('Calories: $selectedCalories');
+              //       });
+              //     },
+              //     children: List.generate(101, (index) {
+              //       return Text(
+              //         '$index',
+              //       );
+              //     }),
+              //   ),
+              // ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  submitToFirestore();
+                },
+                child: Text(
+                  'Submit',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

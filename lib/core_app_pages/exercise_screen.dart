@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intro_to_flutter/wip/log_page.dart';
 
 class ExercisePage extends StatefulWidget {
-  const ExercisePage({super.key});
+  const ExercisePage({Key? key}) : super(key: key);
 
   @override
   State<ExercisePage> createState() => _ExercisePageState();
@@ -47,7 +48,30 @@ class _ExercisePageState extends State<ExercisePage> {
   void submitToFirestore() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      print('Not authentificated user.');
+      print('Not authenticated user.');
+      return;
+    }
+
+    if (dropdownValue3 == null ||
+        dropdownValue1 == null ||
+        dropdownValue2 == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Missing Fields'),
+            content: Text('Please fill out all the fields.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
       return;
     }
 
@@ -65,8 +89,9 @@ class _ExercisePageState extends State<ExercisePage> {
         SetOptions(merge: true),
       );
       print("Values updated to Firestore successfully!");
+      Navigator.pop(context);
     } catch (e) {
-      print("Values failed to updated to Firestore.");
+      print("Failed to update values to Firestore.");
     }
   }
 
@@ -77,90 +102,77 @@ class _ExercisePageState extends State<ExercisePage> {
         title: Text("Exercises"),
         backgroundColor: Color.fromARGB(255, 65, 117, 33),
       ),
-      body: Container(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Text(
-            //   "What type of exercise did you do?",
-            //   style: TextStyle(
-            //     fontSize: 18,
-            //   ),
-            // ),
-            // TextField(
-            //   onChanged: (value) {
-            //     setState(() {
-            //       textInput1 = value;
-            //     });
-            //   },
-            // ),
-            SizedBox(height: 20.0),
-            Text(
-              "Exercise(s)",
-              style: TextStyle(
-                fontSize: 18,
+      body: Center(
+        child: Container(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Exercise(s)",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            DropdownButton<String>(
-              value: dropdownValue3,
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue3 = newValue!;
-                });
-              },
-              items: exercises.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              "Duration",
-              style: TextStyle(
-                fontSize: 18,
+              DropdownButton<String>(
+                value: dropdownValue3,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue3 = newValue!;
+                  });
+                },
+                items: exercises.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-            ),
-            DropdownButton<String>(
-              value: dropdownValue1,
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue1 = newValue!;
-                });
-              },
-              items: time.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              "Performance",
-              style: TextStyle(
-                fontSize: 18,
+              SizedBox(height: 20.0),
+              Text(
+                "Duration",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            DropdownButton<String>(
-              value: dropdownValue2,
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue2 = newValue!;
-                });
-              },
-              items: bpm.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 20.0),
-            Center(
-              child: ElevatedButton(
+              DropdownButton<String>(
+                value: dropdownValue1,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue1 = newValue!;
+                  });
+                },
+                items: time.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                "Performance",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              DropdownButton<String>(
+                value: dropdownValue2,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue2 = newValue!;
+                  });
+                },
+                items: bpm.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
                 onPressed: () {
                   submitToFirestore();
                 },
@@ -171,8 +183,8 @@ class _ExercisePageState extends State<ExercisePage> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

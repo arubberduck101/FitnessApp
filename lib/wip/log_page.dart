@@ -1,17 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:intro_to_flutter/core_app_pages/exercise_screen.dart';
 import '../core_app_pages/food_screen.dart';
 
-class LogPage2 extends StatefulWidget {
-  const LogPage2({super.key});
+class LogPage extends StatefulWidget {
+  const LogPage({Key? key}) : super(key: key);
 
   @override
-  State<LogPage2> createState() => _LogPage2State();
+  State<LogPage> createState() => _LogPageState();
 }
 
-class _LogPage2State extends State<LogPage2> {
+class _LogPageState extends State<LogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +21,27 @@ class _LogPage2State extends State<LogPage2> {
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FoodPage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FoodPage()),
+                  );
                 },
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
+                      child: Image.asset(
+                        'assets/images/diet.jpg',
                         height: 150,
-                        color: Colors.blue,
+                        width: 500,
+                        fit: BoxFit.fill,
                       ),
                     ),
                     Positioned(
                       bottom: 5.0,
                       right: 15.0,
                       child: Text(
-                        'Food',
+                        'Diet',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40.0,
@@ -47,15 +49,15 @@ class _LogPage2State extends State<LogPage2> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 10.0,
-                      left: 10.0,
-                      child: Icon(
-                        Icons.food_bank_rounded,
-                        size: 130.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   left: 10.0,
+                    //   child: Icon(
+                    //     Icons.food_bank_rounded,
+                    //     size: 130.0,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -64,16 +66,20 @@ class _LogPage2State extends State<LogPage2> {
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ExercisePage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ExercisePage()),
+                  );
                 },
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
+                      child: Image.asset(
+                        'assets/images/exercising.jpg',
                         height: 150,
-                        color: Colors.blue,
+                        width: 500,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Positioned(
@@ -88,15 +94,15 @@ class _LogPage2State extends State<LogPage2> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 10.0,
-                      left: 10.0,
-                      child: Icon(
-                        Icons.sports_gymnastics,
-                        size: 130.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   left: 10.0,
+                    //   child: Icon(
+                    //     Icons.sports_gymnastics,
+                    //     size: 130.0,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
