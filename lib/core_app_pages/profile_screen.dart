@@ -100,7 +100,8 @@ class _ProfilePageState extends State<ProfilePage> {
               Container(
                   color: const Color.fromRGBO(227, 219, 218, 1.0),
                   height: height * .12,
-                  child: Image.asset('images/logo.png', fit: BoxFit.fitHeight)),
+                  child: Image.asset('assets/images/logo.png',
+                      fit: BoxFit.fitHeight)),
               Padding(
                   padding:
                       const EdgeInsets.only(left: 12.0, right: 12, top: 20),
