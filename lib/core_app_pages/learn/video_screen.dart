@@ -15,7 +15,7 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPageState extends State<VideoPage> {
   Map links = {
-    '10 MIN BEGINNER AB WORKOUT': 'https://youtu.be/uUKAYkQZXko',
+    '10 MIN BEGINNER AB WORKOUT': 'https://youtu.be/K16H8qoqNCo',
   };
   // Map links = {};
   bool loading = false;

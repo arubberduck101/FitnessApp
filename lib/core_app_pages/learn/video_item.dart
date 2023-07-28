@@ -22,13 +22,12 @@ class _VideoItemsState extends State<VideoItems> {
 
   @override
   void initState() {
-    // print( widget.videoPlayerController.toString());
-    // print(widget.videoPlayerController.value.aspectRatio);
+    print(widget.videoPlayerController.toString());
+    print(widget.videoPlayerController.value.aspectRatio);
     super.initState();
     _chewieController = ChewieController(
       videoPlayerController: widget.videoPlayerController,
-      // aspectRatio: widget.videoPlayerController.value.aspectRatio,
-      aspectRatio: 4 / 2,
+      aspectRatio: widget.videoPlayerController.value.aspectRatio,
       autoInitialize: true,
       autoPlay: widget.autoplay,
       looping: widget.looping,

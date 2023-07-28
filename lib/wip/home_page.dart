@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../core_app_pages/dashboard_page.dart';
+import '../core_app_pages/status_page.dart';
+import '../core_app_pages/recommendation_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,14 +21,21 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DashboardPage()),
+                  );
+                },
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
+                      child: Image.asset(
+                        'assets/images/exercising.jpg',
                         height: 150,
-                        color: Color.fromARGB(255, 65, 117, 33),
+                        width: 500,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Positioned(
@@ -40,32 +50,38 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 10.0,
-                      left: 10.0,
-                      child: Icon(
-                        Icons.notes_rounded,
-                        size: 130.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   left: 10.0,
+                    //   child: Icon(
+                    //     Icons.sports_gymnastics,
+                    //     size: 130.0,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             ),
 
-            // Status
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => StatusPage()),
+                  );
+                },
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
+                      child: Image.asset(
+                        'assets/images/exercising.jpg',
                         height: 150,
-                        color: Color.fromARGB(255, 65, 117, 33),
+                        width: 500,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Positioned(
@@ -80,32 +96,39 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 10.0,
-                      left: 10.0,
-                      child: Icon(
-                        Icons.notes_rounded,
-                        size: 130.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   left: 10.0,
+                    //   child: Icon(
+                    //     Icons.sports_gymnastics,
+                    //     size: 130.0,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             ),
 
-            // Recommendations
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RecommendationPage()),
+                  );
+                },
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
+                      child: Image.asset(
+                        'assets/images/exercising.jpg',
                         height: 150,
-                        color: Color.fromARGB(255, 65, 117, 33),
+                        width: 500,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     Positioned(
@@ -120,19 +143,22 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 10.0,
-                      left: 10.0,
-                      child: Icon(
-                        Icons.notes_rounded,
-                        size: 130.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   left: 10.0,
+                    //   child: Icon(
+                    //     Icons.sports_gymnastics,
+                    //     size: 130.0,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             ),
+
+            // Status (You can implement similar navigation for other areas)
+            // ...
           ],
         ),
       ),

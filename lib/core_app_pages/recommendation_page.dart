@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+class RecommendationPage extends StatefulWidget {
+  const RecommendationPage({Key? key}) : super(key: key);
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<RecommendationPage> createState() => _RecommendationPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _RecommendationPageState extends State<RecommendationPage> {
   // Sample list of tasks (replace with your actual data)
-  List<TaskItem> tasks = [
-    TaskItem(title: 'Task 1', isDone: false),
-    TaskItem(title: 'Task 2', isDone: true),
-    TaskItem(title: 'Task 3', isDone: false),
+  List<RecommendationItem> tasks = [
+    RecommendationItem(title: 'Task 1', isDone: false),
+    RecommendationItem(title: 'Task 2', isDone: true),
+    RecommendationItem(title: 'Task 3', isDone: false),
   ];
 
   @override
@@ -88,15 +88,15 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-class TaskItem {
+class RecommendationItem {
   final String title;
   bool isDone;
 
-  TaskItem({required this.title, required this.isDone});
+  RecommendationItem({required this.title, required this.isDone});
 }
 
 class TaskListItem extends StatelessWidget {
-  final TaskItem task;
+  final RecommendationItem task;
   final ValueChanged<bool?> onCheckChanged; // Change to accept nullable bool
 
   TaskListItem({required this.task, required this.onCheckChanged});

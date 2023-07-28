@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+class StatusPage extends StatefulWidget {
+  const StatusPage({Key? key}) : super(key: key);
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<StatusPage> createState() => _StatusPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _StatusPageState extends State<StatusPage> {
   // Sample list of tasks (replace with your actual data)
-  List<TaskItem> tasks = [
-    TaskItem(title: 'Task 1', isDone: false),
-    TaskItem(title: 'Task 2', isDone: true),
-    TaskItem(title: 'Task 3', isDone: false),
+  List<StatusItem> tasks = [
+    StatusItem(title: 'Task 1', isDone: false),
+    StatusItem(title: 'Task 2', isDone: true),
+    StatusItem(title: 'Task 3', isDone: false),
   ];
 
   @override
@@ -88,15 +88,15 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-class TaskItem {
+class StatusItem {
   final String title;
   bool isDone;
 
-  TaskItem({required this.title, required this.isDone});
+  StatusItem({required this.title, required this.isDone});
 }
 
 class TaskListItem extends StatelessWidget {
-  final TaskItem task;
+  final StatusItem task;
   final ValueChanged<bool?> onCheckChanged; // Change to accept nullable bool
 
   TaskListItem({required this.task, required this.onCheckChanged});
