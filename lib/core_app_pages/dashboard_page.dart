@@ -1,114 +1,209 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import './profile_screen.dart';
+
+class CustomProgressBar extends StatelessWidget {
+  final int currentLevel;
+  final int goal;
+
+  CustomProgressBar({required this.currentLevel, required this.goal});
+
+  double calculateProgress(int currentLevel, int goal) {
+    if (currentLevel > goal) {
+      return 1.0;
+    }
+    return currentLevel / goal;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double progressPercentage = calculateProgress(currentLevel, goal);
+
+    return Container(
+      height: 40.0,
+      width: goal.toDouble(), // Set a fixed width for the progress bar
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.black, width: 2.0),
+      ),
+      child: FractionallySizedBox(
+        widthFactor: progressPercentage,
+        alignment: Alignment.centerLeft,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({super.key});
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  // Sample list of tasks (replace with your actual data)
-  List<TaskItem> tasks = [
-    TaskItem(title: 'Task 1', isDone: false),
-    TaskItem(title: 'Task 2', isDone: true),
-    TaskItem(title: 'Task 3', isDone: false),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final username = "John Doe"; // Replace this with the actual username
+    // variables
+
+    var tempUsername = "Morgan Li"; // username until backend fixes it
+
+    int currentSteps = 10000; // from backend later
+    int goalSteps = 10000;
+
+    int currentCalories = 1900;
+    int goalCalories = 1800; // acceptable 1700 -- 1900
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(
-          255, 148, 95, 209), // Replace with your desired background color
-      appBar: AppBar(title: Text("Dashboard")),
-      body: Column(
-        children: [
-          Container(
-            height: 70,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
+        backgroundColor: Color.fromARGB(255, 128, 128, 128),
+        appBar: AppBar(title: Text("Dashboard")),
+        body: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
               children: [
                 Text(
-                  "Hi, $username",
+                  "Welcome, $tempUsername",
                   style: TextStyle(
-                    fontFamily: "Chalkboard SE",
-                    fontSize: MediaQuery.of(context).size.width * 0.09,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
-                Spacer(),
-                Icon(
-                  Icons.settings,
-                  size: 30,
-                  color: Colors.white,
+                SizedBox(
+                  height: 50.0,
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: MediaQuery.of(context).size.height * 0.6,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 50,
-                      spreadRadius: 0,
-                      offset: Offset(0, 0),
+                Text(
+                  "Steps",
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                CustomProgressBar(currentLevel: currentSteps, goal: goalSteps),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Text("Current Steps: $currentSteps",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        textAlign: TextAlign.center)),
+                if (currentSteps >= goalSteps)
+                  Text("Congratulations! You met your step goal",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      textAlign: TextAlign.center),
+                SizedBox(
+                  height: 32,
+                ),
+                Text(
+                  "Calorie Intake",
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                CustomProgressBar(
+                    currentLevel: currentCalories, goal: goalCalories),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Text("Current Calories: $currentCalories",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        textAlign: TextAlign.center)),
+                if (currentCalories > goalCalories - 100 &&
+                    currentCalories < goalCalories + 100)
+                  Text("Congratulations, you met your calorie intake goal",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      textAlign: TextAlign.center),
+                if (currentCalories <= goalCalories - 100 ||
+                    currentCalories >= goalCalories + 100)
+                  Text("try to keep on diet",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      textAlign: TextAlign.center),
+                SizedBox(height: 50.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()),
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.asset(
+                                'assets/images/exercising.jpg',
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 5.0,
+                              right: 15.0,
+                              child: Text(
+                                'Status',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()),
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.asset(
+                                'assets/images/exercising.jpg',
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 5.0,
+                              right: 15.0,
+                              child: Text(
+                                'Recommendation',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
-                ),
-                child: ListView.builder(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    return TaskListItem(
-                      task: tasks[index],
-                      onCheckChanged: (value) {
-                        setState(() {
-                          tasks[index].isDone =
-                              value ?? false; // Handle null value
-                        });
-                      },
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TaskItem {
-  final String title;
-  bool isDone;
-
-  TaskItem({required this.title, required this.isDone});
-}
-
-class TaskListItem extends StatelessWidget {
-  final TaskItem task;
-  final ValueChanged<bool?> onCheckChanged; // Change to accept nullable bool
-
-  TaskListItem({required this.task, required this.onCheckChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Checkbox(
-        value: task.isDone,
-        onChanged: onCheckChanged,
-      ),
-      title: Text(task.title),
-    );
+                )
+              ],
+            )));
   }
 }

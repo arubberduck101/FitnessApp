@@ -3,6 +3,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intro_to_flutter/wip/home_page.dart';
 
 import '../wip/home_screen.dart';
 import '../wip/signup_page.dart';
@@ -78,7 +79,7 @@ class _LoginFormState extends State<LoginForm> {
             .signInWithEmailAndPassword(email: email!, password: password!);
         print("Sucessful login");
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+            MaterialPageRoute(builder: (BuildContext context) => HomePage()));
       } catch (e) {
         print("Login error: ${e.toString()}");
       }
