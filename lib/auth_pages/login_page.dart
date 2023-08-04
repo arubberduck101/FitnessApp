@@ -79,7 +79,7 @@ class _LoginFormState extends State<LoginForm> {
             .signInWithEmailAndPassword(email: email!, password: password!);
         print("Sucessful login");
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
       } catch (e) {
         print("Login error: ${e.toString()}");
       }
