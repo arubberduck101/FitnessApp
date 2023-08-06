@@ -1,10 +1,5 @@
-import '../../firebase/db.dart';
-import './play_video.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-// import '../firebase/db.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -14,28 +9,31 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-  Map links = {
-    '10 MIN BEGINNER AB WORKOUT': 'https://youtu.be/K16H8qoqNCo',
-  };
-  // Map links = {};
+  List<Map<String, String>> videos = [];
   bool loading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getVideos();
   }
 
   getVideos() async {
-    getVideoFiles().then((value) => setState(() {
-          print(value);
-          if (value != null) links = value!;
-        }));
-    Future.delayed(const Duration(seconds: 5)).then((value) {
-      setState(() {
-        loading = true;
-      });
+    // Simulate fetching video links from the database
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      videos = [
+        {
+          'title': 'Full body workout',
+          'url': 'https://www.youtube.com/watch?v=xoUHMebjFSs',
+        },
+        {
+          'title': 'AB workout',
+          'url': 'https://www.youtube.com/watch?v=uUKAYkQZXko',
+        },
+        // Add more dummy video data here
+      ];
+      loading = true;
     });
   }
 
@@ -43,70 +41,122 @@ class _VideoPageState extends State<VideoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Add the AppBar with a back button
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            Navigator.pop(context);
           },
         ),
         title: Text('Video Page'),
       ),
       body: loading
-          ? links.isNotEmpty
+          ? videos.isNotEmpty
               ? Center(
                   child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: links!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String title = links.keys.elementAt(index);
-                      return Card(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: videos.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        String title = videos[index]['title']!;
+                        String videoUrl = videos[index]['url']!;
+                        return Card(
                           child: ListTile(
-                        title: Text(title.substring(0, title.length - 4)),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.play_circle),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PlayVideoPage(
-                                          url: links![title],
-                                          title: title.substring(
-                                              0, title.length - 4),
-                                        )));
-                          },
-                        ),
-                      ));
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
+                            title: Text(title),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.play_circle),
+                              onPressed: () {
+                                _launchYouTubeURL(videoUrl);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                    ),
                   ),
-                ))
+                )
               : Center(
                   child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('No videos found'),
-                    )
-                  ],
-                ))
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No videos found'),
+                      )
+                    ],
+                  ),
+                )
           : Center(
               child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Loading Videos ...'),
-                )
-              ],
-            )),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Loading Videos ...'),
+                  )
+                ],
+              ),
+            ),
     );
   }
+
+  void _launchYouTubeURL(String url) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VideoPlayerScreen(
+          videoUrl: url,
+        ),
+      ),
+    );
+  }
+}
+
+class VideoPlayerScreen extends StatelessWidget {
+  final String videoUrl;
+
+  const VideoPlayerScreen({required this.videoUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Video Player'),
+      ),
+      body: Center(
+        child: YoutubePlayer(
+          controller: YoutubePlayerController(
+            initialVideoId: YoutubePlayer.convertUrlToId(videoUrl)!,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+              mute: false,
+            ),
+          ),
+          showVideoProgressIndicator: true,
+          progressIndicatorColor: Colors.amber,
+          progressColors: ProgressBarColors(
+            playedColor: Colors.amber,
+            handleColor: Colors.amberAccent,
+          ),
+          onReady: () {
+            // Perform any actions you want when the player is ready.
+          },
+          onEnded: (YoutubeMetaData metaData) {
+            // Perform any actions you want when the video ends.
+          },
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: VideoPage(),
+  ));
 }

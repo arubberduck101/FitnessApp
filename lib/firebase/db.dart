@@ -55,21 +55,26 @@ Future<bool> addExerciseLog(Map data) async {
   return true;
 }
 
-Future<Map?> getVideoFiles() async {
+Future<Map> getVideoFiles() async {
   Map files = {};
   try {
-    final storageRef = FirebaseStorage.instance.ref('exercise');
-    ListResult listResult = await storageRef.listAll();
-    for (var item in listResult.items) {
-      // The items under storageRef.
+    // Reference to the "videos" collection in Firestore
+    CollectionReference videosRef =
+        FirebaseFirestore.instance.collection('exercise');
 
-      print('name:${item.name}');
-      item.getDownloadURL().then((url) {
-        files[item.name] = url;
-      });
+    // Fetch all documents in the "videos" collection
+    QuerySnapshot snapshot = await videosRef.get();
+
+    // Iterate through each document and add the video name and URL to the files Map
+    for (var doc in snapshot.docs) {
+      String name = doc['name'];
+      String url = doc['url'];
+      print(url);
+      files[name] = url;
     }
+
     return files;
-  } on FirebaseException catch (e) {
+  } catch (e) {
     print('===== error ========');
     print(e);
     return files;
