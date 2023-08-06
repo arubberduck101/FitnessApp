@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intro_to_flutter/wip/home_page.dart';
 import 'package:intro_to_flutter/wip/log_page.dart';
 import '../core_app_pages/bottom_navigation_bar.dart';
-import '../core_app_pages/dashboard_page.dart';
 import '../core_app_pages/learn/learn_screen.dart';
 import '../core_app_pages/profile_screen.dart';
 

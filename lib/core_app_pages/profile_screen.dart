@@ -87,9 +87,6 @@ class _ProfilePageState extends State<ProfilePage> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Profile Page"),
-      ),
       body: WillPopScope(
         onWillPop: () async {
           Navigator.pop(
