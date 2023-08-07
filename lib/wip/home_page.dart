@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ProfilePage()),
+                                builder: (context) => StatusPage()),
                           );
                         },
                         child: Stack(
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ProfilePage()),
+                                builder: (context) => RecommendationPage()),
                           );
                         },
                         child: Stack(

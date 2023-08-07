@@ -1,7 +1,7 @@
 
 Task List (Project elements)
 
-1) Status  Rec Page Link on Dashboard
+1) DONE: Status  Rec Page Link on Dashboard
 
 2) DONE:  Make sure that Exercises it doesnt replace the old exercise
 
@@ -15,4 +15,7 @@ Task List (Project elements)
 
 7) On Dashboard page, load up the calories in/out from database
 
-8) Python AI Image Classification use camera to classify food
+8) Setting up the Recommendation Page
+
+9) Python AI Image Classification use camera to classify food
+

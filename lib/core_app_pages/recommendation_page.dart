@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// takes info from database and gives user custom advice
+// ex. Don't eat too much junk food
+//     Eat less tomorrow
 class RecommendationPage extends StatefulWidget {
   const RecommendationPage({Key? key}) : super(key: key);
 
