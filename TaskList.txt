@@ -1,0 +1,18 @@
+
+Task List (Project elements)
+
+1) Status  Rec Page Link on Dashboard
+
+2) Make sure that Exercises it doesnt replace the old exercise
+
+3) Profile info --> Firebase
+
+4) Actually put in some Food/Exercise Tips
+
+5) Add more videos to the Video Page
+
+6) Change these pictures/backgrounds to look good
+
+7) On Dashboard page, load up the calories in/out from database
+
+8) Python AI Image Classification use camera to classify food

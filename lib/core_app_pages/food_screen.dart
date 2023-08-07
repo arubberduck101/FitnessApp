@@ -1,7 +1,3 @@
-// CURRENTLY WORKING ON THIS DO NOT TOUCH
-
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -64,20 +60,50 @@ class _FoodPageState extends State<FoodPage> {
 
     final userID = currentUser.uid;
 
-    final Map<String, dynamic> foodData = {
+    final Map<String, dynamic> newFoodData = {
       'Meal Time': dropdownValue1,
       'Food': dropdownValue2,
       'Portion Size': selectedGrams,
-      // 'Calories': selectedCalories,
+      'Calories': int.parse(_calorieController.text),
     };
 
     try {
-      usersCollection.doc(userID).set(
-        {'Diet': foodData},
-        SetOptions(merge: true),
-      );
-      print("Values updated to Firestore successfully!");
-      Navigator.pop(context);
+      // Fetch the existing 'Diet' data from Firestore
+      usersCollection.doc(userID).get().then((snapshot) {
+        if (snapshot.exists) {
+          // If the document exists, get the existing 'Diet' array
+          List<dynamic>? existingDietArray = (snapshot.data()
+              as Map<String, dynamic>?)?['Diet'] as List<dynamic>?;
+
+          if (existingDietArray != null) {
+            // If the 'Diet' array already exists, append the new food data to it
+            existingDietArray.add(newFoodData);
+          } else {
+            // If the 'Diet' array does not exist, create a new array with the new food data
+            existingDietArray = [newFoodData];
+          }
+
+          // Update the 'Diet' field in Firestore with the updated array
+          usersCollection.doc(userID).set(
+            {'Diet': existingDietArray},
+            SetOptions(merge: true),
+          );
+
+          print("Values updated to Firestore successfully!");
+          Navigator.pop(context);
+        } else {
+          // If the document doesn't exist, create a new document with the 'Diet' array
+          usersCollection.doc(userID).set(
+            {
+              'Diet': [newFoodData]
+            },
+            SetOptions(merge: true),
+          );
+
+          print("Values added to Firestore successfully!");
+          Navigator.pop(context);
+        }
+      });
     } catch (e) {
       print("Failed to update values to Firestore.");
     }
@@ -203,26 +229,26 @@ class _FoodPageState extends State<FoodPage> {
                   hintText: 'Enter Calories Consumed',
                 ),
               ),
-              // Container(
-              //   height: 100,
-              //   child: ListWheelScrollView(
-              //     controller: calorieScrollController,
-              //     itemExtent: 40,
-              //     diameterRatio: 1.5,
-              //     physics: FixedExtentScrollPhysics(),
-              //     onSelectedItemChanged: (index) {
-              //       setState(() {
-              //         selectedCalories = index;
-              //         print('Calories: $selectedCalories');
-              //       });
-              //     },
-              //     children: List.generate(101, (index) {
-              //       return Text(
-              //         '$index',
-              //       );
-              //     }),
-              //   ),
-              // ),
+              Container(
+                height: 100,
+                child: ListWheelScrollView(
+                  controller: calorieScrollController,
+                  itemExtent: 40,
+                  diameterRatio: 1.5,
+                  physics: FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      selectedCalories = index;
+                      print('Calories: $selectedCalories');
+                    });
+                  },
+                  children: List.generate(101, (index) {
+                    return Text(
+                      '$index',
+                    );
+                  }),
+                ),
+              ),
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
