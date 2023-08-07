@@ -77,19 +77,49 @@ class _ExercisePageState extends State<ExercisePage> {
 
     final userID = currentUser.uid;
 
-    final Map<String, dynamic> exerciseData = {
+    final Map<String, dynamic> newExerciseData = {
       'Exercise': dropdownValue3,
       'Duration': dropdownValue1,
       'BPM': dropdownValue2,
     };
 
     try {
-      usersCollection.doc(userID).set(
-        {'Exercises': exerciseData},
-        SetOptions(merge: true),
-      );
-      print("Values updated to Firestore successfully!");
-      Navigator.pop(context);
+      // Fetch the existing 'Exercises' data from Firestore
+      usersCollection.doc(userID).get().then((snapshot) {
+        if (snapshot.exists) {
+          // If the document exists, get the existing 'Exercises' array
+          List<dynamic>? existingExercisesArray = (snapshot.data()
+              as Map<String, dynamic>?)?['Exercises'] as List<dynamic>?;
+
+          if (existingExercisesArray != null) {
+            // If the 'Exercises' array already exists, append the new exercise data to it
+            existingExercisesArray.add(newExerciseData);
+          } else {
+            // If the 'Exercises' array does not exist, create a new array with the new exercise data
+            existingExercisesArray = [newExerciseData];
+          }
+
+          // Update the 'Exercises' field in Firestore with the updated array
+          usersCollection.doc(userID).set(
+            {'Exercises': existingExercisesArray},
+            SetOptions(merge: true),
+          );
+
+          print("Values updated to Firestore successfully!");
+          Navigator.pop(context);
+        } else {
+          // If the document doesn't exist, create a new document with the 'Exercises' array
+          usersCollection.doc(userID).set(
+            {
+              'Exercises': [newExerciseData]
+            },
+            SetOptions(merge: true),
+          );
+
+          print("Values added to Firestore successfully!");
+          Navigator.pop(context);
+        }
+      });
     } catch (e) {
       print("Failed to update values to Firestore.");
     }
