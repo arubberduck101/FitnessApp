@@ -65,6 +65,7 @@ class _TipPageState extends State<TipPage> {
     'Listen to Hunger: Eat when hungry, stop when satisfied, not overly full.',
     'Grilled or Baked: Opt for cooking methods that use less added fats.',
     'Homemade Dressing: Control ingredients and avoid excess sugars in salads.',
+    'Eat when hungry',
   ];
 
   // Function to generate 3 random numbers within the range of 0 to (lengthOfList - 1)
