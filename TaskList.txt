@@ -3,11 +3,11 @@ Task List (Project elements)
 
 1) Status  Rec Page Link on Dashboard
 
-2) Make sure that Exercises it doesnt replace the old exercise
+2) DONE:  Make sure that Exercises it doesnt replace the old exercise
 
 3) Profile info --> Firebase
 
-4) Actually put in some Food/Exercise Tips
+4) DONE: Actually put in some Food/Exercise Tips
 
 5) Add more videos to the Video Page
 
