@@ -77,9 +77,16 @@ class _LoginFormState extends State<LoginForm> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email!, password: password!);
-        print("Sucessful login");
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+        print("Successful login");
+        String userUID = userCredential.user!.uid; // Get the user UID
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                HomeScreen(userUID: userUID), // Pass the userUID to HomeScreen
+          ),
+        );
       } catch (e) {
         print("Login error: ${e.toString()}");
       }

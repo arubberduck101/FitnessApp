@@ -8,7 +8,9 @@ import '../core_app_pages/learn/learn_screen.dart';
 import '../core_app_pages/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key, required this.userUID}) : super(key: key);
+
+  final String userUID;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,13 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-
-  final List<Widget> _pages = [
-    HomePage(),
-    LogPage(),
-    LearnPage(),
-    ProfilePage(),
-  ];
+  late List<Widget> _pages; // Declare the _pages list
 
   final List<String> _appBarTitles = [
     'Home',
@@ -30,6 +26,20 @@ class _HomeScreenState extends State<HomeScreen> {
     'Learn',
     'Profile',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages = [
+      HomePage(
+        userUID: widget.userUID,
+      ),
+      LogPage(),
+      LearnPage(),
+      ProfilePage(),
+    ];
+  }
 
   void _onTap(int index) {
     setState(() {

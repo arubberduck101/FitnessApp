@@ -1,57 +1,13 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../auth_pages/login_page.dart';
 
-// import 'firebase/authentication.dart';
-
-// import 'authentication.dart';
-// import 'home_screen.dart';
-
 class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   automaticallyImplyLeading: false,
-      //   backgroundColor: Color(0xFFE7A563),
-      //   shape: const RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.only(
-      //       bottomLeft: Radius.circular(50.0),
-      //       bottomRight: Radius.circular(50.0),
-      //     ),
-      //   ),
-      //   toolbarHeight: 180,
-      //   flexibleSpace: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       GestureDetector(
-      //         onTap: () => Navigator.pop(context),
-      //         child: const Padding(
-      //           padding: EdgeInsets.only(left: 10.0),
-      //           child: Icon(Icons.arrow_back),
-      //         ),
-      //       ),
-      //       Center(
-      //         child: Container(
-      //           height: 85,
-      //           width: 110,
-      //           decoration: const BoxDecoration(
-      //             image: DecorationImage(
-      //                 image: AssetImage('assets/images/fitnessappimage.png'),
-      //                 fit: BoxFit.cover),
-      //           ),
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
-
       body: Container(
         color: Color.fromARGB(255, 215, 208, 183),
         padding: EdgeInsets.all(20.0),
@@ -107,19 +63,24 @@ class _SignupFormState extends State<SignupForm> {
   String? userUID;
   String? exercises;
   String? diet;
+  String? username; // Added username field
 
   bool _obscureText = false;
 
   bool agree = false;
 
-  final pass = new TextEditingController();
+  final pass = TextEditingController();
 
   _addUserDetails(String email) async {
     await FirebaseFirestore.instance.collection('Users').doc(userUID).set({
       'Email': email,
-      'UserID': userUID,
+      'Name': username,
       'Exercises': exercises,
       'Diet': diet,
+      'Height': 0,
+      'Weight': 0,
+      'Age': 0,
+      "Gender": "None"
     });
   }
 
@@ -153,7 +114,7 @@ class _SignupFormState extends State<SignupForm> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text('Invalid Input'),
-                  content: Text(e.message ?? 'An error occured.'),
+                  content: Text(e.message ?? 'An error occurred.'),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -223,7 +184,6 @@ class _SignupFormState extends State<SignupForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          // email
           TextFormField(
             decoration: InputDecoration(
               fillColor: Color.fromARGB(50, 96, 93, 83),
@@ -262,10 +222,7 @@ class _SignupFormState extends State<SignupForm> {
             },
             keyboardType: TextInputType.emailAddress,
           ),
-
           SizedBox(height: 20.0),
-
-          // password
           TextFormField(
             controller: pass,
             decoration: InputDecoration(
@@ -316,7 +273,6 @@ class _SignupFormState extends State<SignupForm> {
             },
           ),
           SizedBox(height: 20.0),
-          // confirm passwords
           TextFormField(
             decoration: InputDecoration(
               fillColor: Color.fromARGB(50, 96, 93, 83),
@@ -357,8 +313,41 @@ class _SignupFormState extends State<SignupForm> {
             },
           ),
           SizedBox(height: 20.0),
-          // name
-
+          TextFormField(
+            decoration: InputDecoration(
+              fillColor: Color.fromARGB(50, 96, 93, 83),
+              filled: true,
+              prefixIcon: Icon(
+                Icons.person,
+              ),
+              hintText: 'Username',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 65, 117, 33),
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
+              ),
+            ),
+            onSaved: (val) {
+              debugPrint(username.toString());
+              username = val.toString();
+              debugPrint(username.toString());
+            },
+            keyboardType: TextInputType.text,
+          ),
+          SizedBox(height: 20.0),
           Row(
             children: <Widget>[
               Expanded(
@@ -375,53 +364,13 @@ class _SignupFormState extends State<SignupForm> {
               Expanded(
                 flex: 4,
                 child: Text(
-                    'By creating account, I agree to Terms & Conditions and Privacy Policy.'),
+                    'By creating account, $username agrees to Terms & Conditions and Privacy Policy.'),
               ),
             ],
           ),
           SizedBox(
             height: 10,
           ),
-
-          // signUP button
-          // SizedBox(
-          //   height: 40,
-          //   width: double.infinity,
-          //   child: ElevatedButton(
-          //     onPressed: () {
-          //       // comment this block after you setup the Firebase
-          //       Navigator.pushReplacement(context,
-          //           MaterialPageRoute(builder: (context) => LoginPage()));
-
-          //       //uncomment this block after you set up the Firebase
-          //       // if (_formKey.currentState!.validate()) {
-          //       //   _formKey.currentState!.save();
-          //       //
-          //       //   AuthenticationHelper()
-          //       //       .signUp(email: email!, password: password!)
-          //       //       .then((result) {
-          //       //     if (result == null) {
-          //       //       Navigator.pushReplacement(context,
-          //       //           MaterialPageRoute(builder: (context) => RoutePage()));
-          //       //     } else {
-          //       //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //       //         content: Text(
-          //       //           result,
-          //       //           style: TextStyle(fontSize: 16),
-          //       //         ),
-          //       //       ));
-          //       //     }
-          //       //   });
-          //       // }
-          //     },
-          //     style: ElevatedButton.styleFrom(
-          //         backgroundColor: Color.fromARGB(255, 65, 117, 33),
-          //         shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.all(Radius.circular(24.0)))),
-          //     child: Text('Sign Up'),
-          //   ),
-          // ),
-
           Container(
             height: 40,
             width: double.infinity,
@@ -437,9 +386,7 @@ class _SignupFormState extends State<SignupForm> {
               ),
             ),
           ),
-
           SizedBox(height: 20.0),
-
           RichText(
             text: TextSpan(
               text: 'Already have an account? ',
@@ -463,3 +410,5 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 }
+
+void main() => runApp(MaterialApp(home: Signup()));
