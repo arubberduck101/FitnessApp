@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase/authentication.dart';
 import '../firebase/db.dart';
 
@@ -62,23 +62,32 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     Map<String, dynamic> userInfo = {
-      'Height': _heightController.text.trim(),
-      'Weight': _weightController.text.trim(),
-      'Age': _ageController.text.trim(),
+      'Height': double.parse(_heightController.text.trim()),
+      'Weight': double.parse(_weightController.text.trim()),
+      'Age': int.parse(_ageController.text.trim()),
       'Gender': _gender,
     };
 
     buildLoading();
 
     try {
-      await editUserInfo(userInfo);
+      final currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser == null) {
+        print('Not authenticated user.');
+        return;
+      }
+
+      final userID = currentUser.uid;
+
+      // await editUserInfo(userInfo);
       Navigator.of(context).pop();
       snapBarBuilder('User info edited');
 
       // Update user info in Firestore
       await FirebaseFirestore.instance
           .collection('Users') // Change this to your collection name
-          .doc('user_id_here') // Change this to the user's document ID
+          .doc(userID) // Change this to the user's document ID
           .update(userInfo);
     } catch (e) {
       print('Error updating user info: $e');
