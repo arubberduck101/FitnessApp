@@ -31,6 +31,22 @@ class _VideoPageState extends State<VideoPage> {
           'title': 'AB workout',
           'url': 'https://www.youtube.com/watch?v=uUKAYkQZXko',
         },
+        {
+          'title': 'Tricep Workout',
+          'url': 'https://www.youtube.com/watch?v=rj0eWvZ4Deo&t=2s',
+        },
+        {
+          'title': 'Bicep Workout',
+          'url': 'https://www.youtube.com/watch?v=CLccU7tk7es',
+        },
+        {
+          'title': 'Leg workouts Workout',
+          'url': 'https://www.youtube.com/watch?v=H6mRkx1x77k',
+        },
+        {
+          'title': 'Back Workout',
+          'url': 'https://www.youtube.com/watch?v=DXL18E7QRbk',
+        },
         // Add more dummy video data here
       ];
       loading = true;
