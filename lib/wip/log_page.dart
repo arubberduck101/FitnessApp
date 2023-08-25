@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_flutter/core_app_pages/exercise_screen.dart';
-import '../core_app_pages/food_screen.dart';
+import '../core_app_pages/food_log_screen.dart';
 
 class LogPage extends StatefulWidget {
   const LogPage({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class _LogPageState extends State<LogPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FoodPage()),
+                    MaterialPageRoute(builder: (context) => FoodLogPage()),
                   );
                 },
                 child: Stack(

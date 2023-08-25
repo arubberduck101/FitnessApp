@@ -80,3 +80,27 @@ Future<Map> getVideoFiles() async {
     return files;
   }
 }
+
+Future<List> getFoodLog() async {
+  List log = [];
+  await getUserInfo().then((data) {
+    try {
+      List tempList = data!['foodLog'];
+      log = tempList;
+    } catch (_) {
+      print('The date does not have event');
+    }
+  });
+  return log;
+}
+
+Future<bool> addFoodLog(Map data) async {
+  String uid = AuthenticationHelper().uid;
+  List foodLog = await getFoodLog();
+  foodLog.add(data);
+  FirebaseFirestore.instance
+      .collection("exercise")
+      .doc(uid)
+      .update({'foodLog': foodLog});
+  return true;
+}
