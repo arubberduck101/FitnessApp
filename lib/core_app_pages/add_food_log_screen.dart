@@ -50,7 +50,7 @@ class _AddFoodLogPageState extends State<AddFoodLogPage> {
     }
     Map food = {
       'date': DateTime.now().toString().substring(0, 16),
-      'food': _recognitions![0]['label'],
+      'food': foodName,
       'calories': int.parse(caloriesController.text),
     };
 
