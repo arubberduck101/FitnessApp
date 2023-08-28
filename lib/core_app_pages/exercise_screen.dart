@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_to_flutter/wip/log_page.dart';
+import './exercise_to_calories_function.dart';
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class ExercisePage extends StatefulWidget {
   @override
   State<ExercisePage> createState() => _ExercisePageState();
 }
+//you stink
 
 class _ExercisePageState extends State<ExercisePage> {
   String? textInput1;
@@ -76,13 +78,74 @@ class _ExercisePageState extends State<ExercisePage> {
     }
 
     final userID = currentUser.uid;
+    double calories = 0;
+
+//banana
+    int age = 0;
+    double weight = 0;
+    double height = 0;
+    String gender = " ";
+    try {
+      usersCollection.doc(userID).get().then((snapshot) {
+        if (snapshot.exists) {
+          // If the document exists, get the existing 'Exercises' array
+          int? ageFromFireStore =
+              (snapshot.data() as Map<String, dynamic>?)?['Age'] as int?;
+          print("Values updated to Firestore successfully!");
+          age = ageFromFireStore! as int;
+          double? weightFromFireStore =
+              (snapshot.data() as Map<String, dynamic>?)?['Weight'] as double?;
+          print("Values updated to Firestore successfully!");
+          weight = weightFromFireStore!;
+          double? heightFromFireStore =
+              (snapshot.data() as Map<String, dynamic>?)?['Height'] as double?;
+          print("Values updated to Firestore successfully!");
+          height = heightFromFireStore!;
+          String? genderFromFireStore =
+              (snapshot.data() as Map<String, dynamic>?)?['Gender'] as String?;
+          print("Values updated to Firestore successfully!");
+          gender = genderFromFireStore!;
+        }
+      });
+    } catch (e) {
+      print("Failed to update values to Firestore.");
+    }
+
+    // (double heightInInches, double weightInLbs,
+    // double minutesExercised, double bpm, int age, String gender)
+    // double duration
+
+    double duration = 0;
+
+    if (dropdownValue1 == "15 minutes") {
+      duration = 15;
+    } else if (dropdownValue1 == "30 minutes") {
+      duration = 30;
+    } else if (dropdownValue1 == "45 minutes") {
+      duration = 45;
+    } else {
+      duration = 60;
+    }
+
+    String bpmNumberString = dropdownValue2!.substring(0, 2);
+
+    double bpmNumberDouble = double.parse(bpmNumberString);
+
+    print(bpmNumberDouble.toString());
+
+    calories = exerciseToCalories(
+        height, weight, duration, bpmNumberDouble, age, gender);
+    //I am a banana
+    //how s your day
 
     final Map<String, dynamic> newExerciseData = {
       'Exercise': dropdownValue3,
       'Duration': dropdownValue1,
       'BPM': dropdownValue2,
-    };
+      'Calories': calories
 
+      //:(
+    };
     try {
       // Fetch the existing 'Exercises' data from Firestore
       usersCollection.doc(userID).get().then((snapshot) {
