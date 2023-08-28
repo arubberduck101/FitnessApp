@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'authentication.dart';
 
 Future<Map?> getUserInfo() async {
   Map? data;
   String uid = AuthenticationHelper().uid;
   await FirebaseFirestore.instance
-      .collection("exercise")
+      .collection("Users")
       .doc(uid)
       .get()
       .then((DocumentSnapshot documentSnapshot) {
@@ -79,4 +80,28 @@ Future<Map> getVideoFiles() async {
     print(e);
     return files;
   }
+}
+
+Future<List> getFoodLog() async {
+  List log = [];
+  await getUserInfo().then((data) {
+    try {
+      List tempList = data!['foodLog'];
+      log = tempList;
+    } catch (_) {
+      print('The date does not have event');
+    }
+  });
+  return log;
+}
+
+Future<bool> addFoodLog(Map data) async {
+  String uid = AuthenticationHelper().uid;
+  List foodLog = await getFoodLog();
+  foodLog.add(data);
+  FirebaseFirestore.instance
+      .collection("Users")
+      .doc(uid)
+      .update({'foodLog': foodLog});
+  return true;
 }
