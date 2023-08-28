@@ -43,7 +43,6 @@ dependencies:
   cloud_firestore: ^4.8.2
   chewie: ^1.7.0
   firebase_storage: ^11.2.5
-  url_launcher: ^6.1.12
   image_picker: ^1.0.2
   tflite: ^1.1.2
   # tflite: ^1.1.2
