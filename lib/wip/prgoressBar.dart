@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomProgressBar extends StatelessWidget {
-  final int currentLevel;
-  final int goal;
+  final double currentLevel;
+  final double goal;
 
   CustomProgressBar({required this.currentLevel, required this.goal});
 
-  double calculateProgress(int currentLevel, int goal) {
+  double calculateProgress(double currentLevel, double goal) {
     if (currentLevel > goal) {
       return 1.0;
     }

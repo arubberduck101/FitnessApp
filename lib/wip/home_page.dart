@@ -1,60 +1,79 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intro_to_flutter/firebase/db.dart';
 import '../core_app_pages/status_page.dart';
 import '../core_app_pages/recommendation_page.dart';
 import '../core_app_pages/profile_screen.dart';
 import './prgoressBar.dart';
+import 'dart:core';
 
 class HomePage extends StatefulWidget {
-  final String userUID;
-
-  const HomePage({Key? key, required this.userUID}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
+List _foodLog = [];
+
 class _HomePageState extends State<HomePage> {
   String _userName = 'Placeholder'; // Initialize with an empty string
+
+  double currentCaloriesIn = 10000; // from backend later
+  double goalCaloriesIn = 10000;
+
+  double currentCaloriesOut = 1900;
+  double goalCaloriesOut = 1800; // acceptable 1700 -- 1900
+
+  Map? userInfo;
+  String? username;
 
   @override
   void initState() {
     super.initState();
-    debugPrint("initState: Fetching user name");
-    _fetchUserName(); // Fetch the user's name when the widget is initialized
+    debugPrint("initState: Fetching user info");
+    _getUserInfo();
   }
 
-  void _fetchUserName() async {
-    debugPrint("cool this works");
-    try {
-      // Fetch the document using userUID as the document ID
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-          await FirebaseFirestore.instance
-              .collection('Users')
-              .doc(widget.userUID)
-              .get();
-      debugPrint(documentSnapshot.toString());
-      if (documentSnapshot.exists) {
-        // If the document exists, extract the name field
-        setState(() {
-          _userName = documentSnapshot.data()!['Name'];
-        });
+  _getUserInfo() async {
+    Map? temp = await getUserInfo();
+
+    setState(() {
+      userInfo = temp;
+      _userName = userInfo!["Name"];
+    });
+
+    setCaloriesIn(userInfo!);
+  }
+
+  void setCaloriesIn(Map userInfoMap) {
+    List<dynamic> foodLog = userInfoMap['foodLog'];
+    double totalCalories = 0;
+
+    // Get the current date
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+
+    // Iterate through foodLog
+    // Inside the for loop
+    for (var foodEntry in foodLog) {
+      DateTime entryDate = DateTime.parse(foodEntry['date']);
+
+      // Check if the entry date is on the same day (regardless of time)
+      if (entryDate.year == today.year &&
+          entryDate.month == today.month &&
+          entryDate.day == today.day) {
+        totalCalories += foodEntry['calories'];
       }
-    } catch (e) {
-      debugPrint('Error fetching user name: $e');
     }
+
+    currentCaloriesIn = totalCalories;
+
+    debugPrint("Total calories consumed today: $totalCalories");
   }
 
   @override
   Widget build(BuildContext context) {
-    var tempUsername = _userName; // Use the fetched username
-
-    int currentSteps = 10000; // from backend later
-    int goalSteps = 10000;
-
-    int currentCalories = 1900;
-    int goalCalories = 1800; // acceptable 1700 -- 1900
-
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 102, 106, 219),
         body: SingleChildScrollView(
@@ -74,47 +93,48 @@ class _HomePageState extends State<HomePage> {
                       height: 50.0,
                     ),
                     Text(
-                      "Steps",
+                      "Calories In",
                       style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                     CustomProgressBar(
-                        currentLevel: currentSteps, goal: goalSteps),
+                        currentLevel: currentCaloriesIn, goal: goalCaloriesIn),
                     Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text("Current Steps: $currentSteps",
+                        child: Text("Current Calories In: $currentCaloriesIn",
                             style: TextStyle(fontSize: 18, color: Colors.white),
                             textAlign: TextAlign.center)),
-                    if (currentSteps >= goalSteps)
-                      Text("Congratulations! You met your step goal",
+                    if (currentCaloriesIn >= goalCaloriesIn)
+                      Text("Congratulations! You met your calories in goal",
                           style: TextStyle(fontSize: 18, color: Colors.white),
                           textAlign: TextAlign.center),
                     SizedBox(
                       height: 32,
                     ),
                     Text(
-                      "Calorie Intake",
+                      "Calories Out",
                       style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                     CustomProgressBar(
-                        currentLevel: currentCalories, goal: goalCalories),
+                        currentLevel: currentCaloriesOut,
+                        goal: goalCaloriesOut),
                     Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text("Current Calories: $currentCalories",
+                        child: Text("Current Calories Out: $currentCaloriesOut",
                             style: TextStyle(fontSize: 18, color: Colors.white),
                             textAlign: TextAlign.center)),
-                    if (currentCalories > goalCalories - 100 &&
-                        currentCalories < goalCalories + 100)
-                      Text("Congratulations, you met your calorie intake goal",
+                    if (currentCaloriesOut > goalCaloriesOut - 100 &&
+                        currentCaloriesOut < goalCaloriesOut + 100)
+                      Text("Congratulations, you met your calorie outtake goal",
                           style: TextStyle(fontSize: 18, color: Colors.white),
                           textAlign: TextAlign.center),
-                    if (currentCalories <= goalCalories - 100 ||
-                        currentCalories >= goalCalories + 100)
+                    if (currentCaloriesOut <= goalCaloriesOut - 100 ||
+                        currentCaloriesOut >= goalCaloriesOut + 100)
                       Text("try to keep on diet",
                           style: TextStyle(fontSize: 18, color: Colors.white),
                           textAlign: TextAlign.center),

@@ -8,9 +8,7 @@ import '../core_app_pages/learn/learn_screen.dart';
 import '../core_app_pages/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, required this.userUID}) : super(key: key);
-
-  final String userUID;
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,9 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     _pages = [
-      HomePage(
-        userUID: widget.userUID,
-      ),
+      HomePage(),
       LogPage(),
       LearnPage(),
       ProfilePage(),

@@ -32,6 +32,10 @@ class _FoodLogPageState extends State<FoodLogPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Food Log"),
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+      ),
       body: Container(
         color: const Color(0xFFC4BCB2),
         child: Center(

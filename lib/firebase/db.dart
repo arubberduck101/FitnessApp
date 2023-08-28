@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'authentication.dart';
 
 Future<Map?> getUserInfo() async {
   Map? data;
   String uid = AuthenticationHelper().uid;
   await FirebaseFirestore.instance
-      .collection("exercise")
+      .collection("Users")
       .doc(uid)
       .get()
       .then((DocumentSnapshot documentSnapshot) {
@@ -99,7 +100,7 @@ Future<bool> addFoodLog(Map data) async {
   List foodLog = await getFoodLog();
   foodLog.add(data);
   FirebaseFirestore.instance
-      .collection("exercise")
+      .collection("Users")
       .doc(uid)
       .update({'foodLog': foodLog});
   return true;
