@@ -5,7 +5,7 @@ Task List (Project elements)
 
 2) DONE:  Make sure that Exercises it doesnt replace the old exercise
 
-3) Profile info --> Firebase
+3) DONE : Profile info --> Firebase
 
 4) DONE: Actually put in some Food/Exercise Tips
 
@@ -13,9 +13,25 @@ Task List (Project elements)
 
 6) Change these pictures/backgrounds to look good
 
-7) On Dashboard page, load up the calories in/out from database
+7) DONE: On Home page, load up the calories in/out from database
 
-8) Setting up the Recommendation Page
+8) DONE : Python AI Image Classification use camera to classify food
 
-9) Python AI Image Classification use camera to classify food
 
+
+NEW TASKS
+
+1) On Home Page, load up the calories out from database
+
+2) On Profile Page, allow user to delete their account 
+
+3) On Video Page, add more videos so that we have each body part
+
+4) In general, change these pictures/backgrounds to look good.
+    a) Remember to add the image to the assets/images folder.
+    b) Also add the image path to the pubspec.yaml file
+
+5) On Home Page, change the Calories in/out messages.
+    a) Make the fonts nicer
+    b) Display the Goal Calories for both in/out
+    c) Put an actual message instead of "try to keep on diet"
