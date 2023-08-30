@@ -28,7 +28,8 @@ double getBMRForExerciseDuration(double weightInLbs, double heightInInches,
 double getActiveCalories(
     double heartRate, double weightInLbs, int age, double time) {
   double weightInKg = poundsToKilograms(weightInLbs);
-  double calories = ((heartRate - 80) * 1.0 / (220 - age) * 1.0) * weightInKg;
+  double calories =
+      (((heartRate - 80) * 1.0) / ((220 - age) * 1.0)) * weightInKg;
   double totalCalories = calories * time;
   return totalCalories;
 }

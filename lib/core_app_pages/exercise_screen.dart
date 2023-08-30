@@ -47,7 +47,7 @@ class _ExercisePageState extends State<ExercisePage> {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('Users');
 
-  void submitToFirestore() {
+  void submitToFirestore() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       print('Not authenticated user.');
@@ -78,113 +78,65 @@ class _ExercisePageState extends State<ExercisePage> {
     }
 
     final userID = currentUser.uid;
-    double calories = 0;
 
-//banana
-    int age = 0;
-    double weight = 0;
-    double height = 0;
-    String gender = " ";
     try {
-      usersCollection.doc(userID).get().then((snapshot) {
-        if (snapshot.exists) {
-          // If the document exists, get the existing 'Exercises' array
-          int? ageFromFireStore =
-              (snapshot.data() as Map<String, dynamic>?)?['Age'] as int?;
-          print("Values updated to Firestore successfully!");
-          age = ageFromFireStore! as int;
-          double? weightFromFireStore =
-              (snapshot.data() as Map<String, dynamic>?)?['Weight'] as double?;
-          print("Values updated to Firestore successfully!");
-          weight = weightFromFireStore!;
-          double? heightFromFireStore =
-              (snapshot.data() as Map<String, dynamic>?)?['Height'] as double?;
-          print("Values updated to Firestore successfully!");
-          height = heightFromFireStore!;
-          String? genderFromFireStore =
-              (snapshot.data() as Map<String, dynamic>?)?['Gender'] as String?;
-          print("Values updated to Firestore successfully!");
-          gender = genderFromFireStore!;
-        }
-      });
-    } catch (e) {
-      print("Failed to update values to Firestore.");
-    }
+      final snapshot = await usersCollection.doc(userID).get();
+      if (snapshot.exists) {
+        int? ageFromFireStore = snapshot['Age'] as int?;
+        double? weightFromFireStore = snapshot['Weight'] as double?;
+        double? heightFromFireStore = snapshot['Height'] as double?;
+        String? genderFromFireStore = snapshot['Gender'] as String?;
 
-    // (double heightInInches, double weightInLbs,
-    // double minutesExercised, double bpm, int age, String gender)
-    // double duration
+        double duration = 0;
 
-    double duration = 0;
-
-    if (dropdownValue1 == "15 minutes") {
-      duration = 15;
-    } else if (dropdownValue1 == "30 minutes") {
-      duration = 30;
-    } else if (dropdownValue1 == "45 minutes") {
-      duration = 45;
-    } else {
-      duration = 60;
-    }
-
-    String bpmNumberString = dropdownValue2!.substring(0, 2);
-
-    double bpmNumberDouble = double.parse(bpmNumberString);
-
-    print(bpmNumberDouble.toString());
-
-    calories = exerciseToCalories(
-        height, weight, duration, bpmNumberDouble, age, gender);
-    //I am a banana
-    //how s your day
-
-    final Map<String, dynamic> newExerciseData = {
-      'Exercise': dropdownValue3,
-      'Duration': dropdownValue1,
-      'BPM': dropdownValue2,
-      'Calories': calories
-
-      //:(
-    };
-    try {
-      // Fetch the existing 'Exercises' data from Firestore
-      usersCollection.doc(userID).get().then((snapshot) {
-        if (snapshot.exists) {
-          // If the document exists, get the existing 'Exercises' array
-          List<dynamic>? existingExercisesArray = (snapshot.data()
-              as Map<String, dynamic>?)?['Exercises'] as List<dynamic>?;
-
-          if (existingExercisesArray != null) {
-            // If the 'Exercises' array already exists, append the new exercise data to it
-            existingExercisesArray.add(newExerciseData);
-          } else {
-            // If the 'Exercises' array does not exist, create a new array with the new exercise data
-            existingExercisesArray = [newExerciseData];
-          }
-
-          // Update the 'Exercises' field in Firestore with the updated array
-          usersCollection.doc(userID).set(
-            {'Exercises': existingExercisesArray},
-            SetOptions(merge: true),
-          );
-
-          print("Values updated to Firestore successfully!");
-          Navigator.pop(context);
+        if (dropdownValue1 == "15 minutes") {
+          duration = 15;
+        } else if (dropdownValue1 == "30 minutes") {
+          duration = 30;
+        } else if (dropdownValue1 == "45 minutes") {
+          duration = 45;
         } else {
-          // If the document doesn't exist, create a new document with the 'Exercises' array
-          usersCollection.doc(userID).set(
-            {
-              'Exercises': [newExerciseData]
-            },
-            SetOptions(merge: true),
-          );
-
-          print("Values added to Firestore successfully!");
-          Navigator.pop(context);
+          duration = 60;
         }
-      });
+
+        String bpmNumberString = dropdownValue2!.substring(0, 2);
+        double bpmNumberDouble = double.parse(bpmNumberString);
+
+        double calories = exerciseToCalories(
+            heightFromFireStore!,
+            weightFromFireStore!,
+            duration,
+            bpmNumberDouble,
+            ageFromFireStore!,
+            genderFromFireStore!);
+
+        final Map<String, dynamic> newExerciseData = {
+          'Exercise': dropdownValue3,
+          'Duration': dropdownValue1,
+          'BPM': dropdownValue2,
+          'Calories': calories
+        };
+
+        List<dynamic>? existingExercisesArray =
+            snapshot['Exercises'] as List<dynamic>?;
+        if (existingExercisesArray == null) {
+          existingExercisesArray = [];
+        }
+
+        existingExercisesArray.add(newExerciseData);
+
+        await usersCollection.doc(userID).set(
+          {'Exercises': existingExercisesArray},
+          SetOptions(merge: true),
+        );
+
+        print("Values updated to Firestore successfully!");
+        Navigator.pop(context);
+      } else {
+        print("User data does not exist in Firestore.");
+      }
     } catch (e) {
-      print("Failed to update values to Firestore.");
+      print("Failed to update values to Firestore: $e");
     }
   }
 
