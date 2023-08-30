@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/core_app_pages/exercise_screen.dart';
-import 'package:intro_to_flutter/wip/log_page.dart';
+import 'package:intro_to_flutter/core_app_pages/log/exercise_screen.dart';
+import 'package:intro_to_flutter/core_app_pages/log/log_page.dart';
 import './tip_screen.dart';
 import './video_screen.dart';
-import '../../wip/home_page.dart';
+import '../home/home_page.dart';
 import '../../core_app_pages/profile_screen.dart';
 
 class LearnPage extends StatefulWidget {

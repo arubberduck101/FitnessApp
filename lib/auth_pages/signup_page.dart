@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../auth_pages/login_page.dart';
+import 'login_page.dart';
 
 class Signup extends StatelessWidget {
   @override

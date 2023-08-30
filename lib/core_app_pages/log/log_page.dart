@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/core_app_pages/exercise_screen.dart';
-import '../core_app_pages/food_log_screen.dart';
-import './home_page.dart';
-import '../core_app_pages/learn/learn_screen.dart';
-import '../core_app_pages/profile_screen.dart';
+import 'package:intro_to_flutter/core_app_pages/log/exercise_screen.dart';
+import 'food_log_screen.dart';
+import '../home/home_page.dart';
+import '../learn/learn_screen.dart';
+import '../profile_screen.dart';
 
 class LogPage extends StatefulWidget {
   const LogPage({Key? key}) : super(key: key);

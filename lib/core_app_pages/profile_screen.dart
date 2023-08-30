@@ -5,9 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase/authentication.dart';
 import '../firebase/db.dart';
-import '../wip/home_page.dart';
+import 'home/home_page.dart';
 import '../core_app_pages/learn/learn_screen.dart';
-import '../wip/log_page.dart';
+import 'log/log_page.dart';
 import '../auth_pages/login_page.dart';
 
 void main() async {

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/wip/log_page.dart';
-import './exercise_to_calories_function.dart';
+import 'package:intro_to_flutter/core_app_pages/log/log_page.dart';
+import 'exercise_to_calories_function.dart';
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({Key? key}) : super(key: key);

@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intro_to_flutter/core_app_pages/profile_screen.dart';
 import 'package:intro_to_flutter/firebase/db.dart';
-import 'package:intro_to_flutter/wip/home_page.dart';
-
-import '../wip/home_screen.dart';
-import '../wip/signup_page.dart';
+import 'package:intro_to_flutter/core_app_pages/home/home_page.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);

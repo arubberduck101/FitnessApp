@@ -1,4 +1,4 @@
-import '../firebase/db.dart';
+import '../../firebase/db.dart';
 import 'add_food_log_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

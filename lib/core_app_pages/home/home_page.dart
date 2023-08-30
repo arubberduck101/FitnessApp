@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_flutter/core_app_pages/profile_screen.dart';
-import 'package:intro_to_flutter/wip/log_page.dart';
-import '../core_app_pages/status_page.dart';
-import '../core_app_pages/recommendation_page.dart';
-import '../wip/prgoressBar.dart';
-import '../firebase/db.dart';
-import '../core_app_pages/learn/learn_screen.dart';
+import 'package:intro_to_flutter/core_app_pages/log/log_page.dart';
+import 'prgoressBar.dart';
+import '../../firebase/db.dart';
+import '../learn/learn_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

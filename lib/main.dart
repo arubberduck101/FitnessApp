@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_pages/splash_screen.dart';
+import 'splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
