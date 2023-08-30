@@ -157,6 +157,61 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> _confirmDeleteAccount() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Account Deletion'),
+          content: Text(
+              'Are you sure you want to delete your account? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context); // Close the dialog
+                await _deleteAccount(); // Call the delete account function
+              },
+              child: Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteAccount() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser == null) {
+        print('Not authenticated user.');
+        return;
+      }
+
+      // Delete user data from Firestore
+      final userID = currentUser.uid;
+      await FirebaseFirestore.instance.collection('Users').doc(userID).delete();
+
+      // Delete the user's Firebase Authentication account
+      await currentUser.delete();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                LoginPage()), // Replace LoginPage with your login page
+      );
+    } catch (e) {
+      print('Error deleting account: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -263,6 +318,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: ElevatedButton(
                         onPressed: _logout,
                         child: Text('Logout'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.red, // Use your preferred color
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: ElevatedButton(
+                        onPressed: _confirmDeleteAccount,
+                        child: Text('Delete Account'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               Colors.red, // Use your preferred color
