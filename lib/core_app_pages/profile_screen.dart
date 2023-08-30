@@ -5,6 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase/authentication.dart';
 import '../firebase/db.dart';
+import '../wip/home_page.dart';
+import '../core_app_pages/learn/learn_screen.dart';
+import '../wip/log_page.dart';
+import '../auth_pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -117,12 +121,51 @@ class _ProfilePageState extends State<ProfilePage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void _onTap(int index) {
+    if (index == 0) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    }
+
+    if (index == 1) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => LogPage()));
+    }
+
+    if (index == 2) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LearnPage()));
+    }
+
+    if (index == 3) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => ProfilePage()));
+    }
+  }
+
+  void _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                LoginPage()), // Replace LoginPage with your login page
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+      ),
       body: WillPopScope(
         onWillPop: () async {
           Navigator.pop(context);
@@ -161,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         decoration: InputDecoration(
                           counterText: '',
                           labelText: 'Height',
-                          hintText: "5.05",
+                          hintText: "71 (inches)",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -175,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         keyboardType: TextInputType.number,
                         maxLength: 3,
                         decoration: InputDecoration(
-                          label: const Text('Weight (lb)'),
+                          label: const Text('Weight (lbs)'),
                           hintText: "140",
                           counterText: '',
                           border: OutlineInputBorder(
@@ -215,12 +258,48 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: ElevatedButton(
+                        onPressed: _logout,
+                        child: Text('Logout'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.red, // Use your preferred color
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+        selectedItemColor: Color.fromARGB(255, 2, 50, 10),
+        unselectedItemColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        onTap: _onTap,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Log',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb),
+            label: 'Learn',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

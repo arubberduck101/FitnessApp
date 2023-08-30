@@ -3,6 +3,8 @@ import 'package:intro_to_flutter/core_app_pages/exercise_screen.dart';
 import 'package:intro_to_flutter/wip/log_page.dart';
 import './tip_screen.dart';
 import './video_screen.dart';
+import '../../wip/home_page.dart';
+import '../../core_app_pages/profile_screen.dart';
 
 class LearnPage extends StatefulWidget {
   const LearnPage({Key? key}) : super(key: key);
@@ -28,9 +30,35 @@ class _LearnPageState extends State<LearnPage> {
     );
   }
 
+  void _onTap(int index) {
+    if (index == 0) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    }
+
+    if (index == 1) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => LogPage()));
+    }
+
+    if (index == 2) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LearnPage()));
+    }
+
+    if (index == 3) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => ProfilePage()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Learn Page"),
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -127,6 +155,31 @@ class _LearnPageState extends State<LearnPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+        selectedItemColor: Color.fromARGB(255, 2, 50, 10),
+        unselectedItemColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        onTap: _onTap,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Log',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb),
+            label: 'Learn',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

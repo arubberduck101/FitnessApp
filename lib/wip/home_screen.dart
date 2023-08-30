@@ -38,9 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onTap(int index) {
+    if (index == 0) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    }
     setState(() {
       _currentIndex = index;
     });
+
+    // Use pushReplacement to create a new instance of HomePage when navigating to it
   }
 
   @override

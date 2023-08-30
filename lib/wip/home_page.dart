@@ -1,225 +1,277 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intro_to_flutter/firebase/db.dart';
+import 'package:intro_to_flutter/core_app_pages/profile_screen.dart';
+import 'package:intro_to_flutter/wip/log_page.dart';
 import '../core_app_pages/status_page.dart';
 import '../core_app_pages/recommendation_page.dart';
-import '../core_app_pages/profile_screen.dart';
-import './prgoressBar.dart';
-import 'dart:core';
+import '../wip/prgoressBar.dart';
+import '../firebase/db.dart';
+import '../core_app_pages/learn/learn_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-List _foodLog = [];
-
-class _HomePageState extends State<HomePage> {
-  String _userName = 'Placeholder'; // Initialize with an empty string
-
-  double currentCaloriesIn = 10000; // from backend later
-  double goalCaloriesIn = 10000;
-
-  double currentCaloriesOut = 1900;
-  double goalCaloriesOut = 1800; // acceptable 1700 -- 1900
-
+class HomePageState extends State<HomePage> {
+  String _userName = 'Placeholder';
+  double currentCaloriesIn = 0;
+  double goalCaloriesIn = 2000;
+  double currentCaloriesOut = 0;
+  double goalCaloriesOut = 2000;
   Map? userInfo;
   String? username;
 
   @override
   void initState() {
     super.initState();
-    debugPrint("initState: Fetching user info");
     _getUserInfo();
   }
 
   _getUserInfo() async {
     Map? temp = await getUserInfo();
-
     setState(() {
       userInfo = temp;
       _userName = userInfo!["Name"];
     });
 
-    setCaloriesIn(userInfo!);
+    if (userInfo?["Height"] == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => ProfilePage()),
+      );
+    } else {
+      setCaloriesIn(userInfo!);
+    }
   }
 
   void setCaloriesIn(Map userInfoMap) {
-    List<dynamic> foodLog = userInfoMap['foodLog'];
-    double totalCalories = 0;
-
-    // Get the current date
-    DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
-
-    // Iterate through foodLog
-    // Inside the for loop
-    for (var foodEntry in foodLog) {
-      DateTime entryDate = DateTime.parse(foodEntry['date']);
-
-      // Check if the entry date is on the same day (regardless of time)
-      if (entryDate.year == today.year &&
-          entryDate.month == today.month &&
-          entryDate.day == today.day) {
-        totalCalories += foodEntry['calories'];
+    if (userInfoMap['foodLog'].length != 0) {
+      List<dynamic> foodLog = userInfoMap['foodLog'];
+      double totalCalories = 0;
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+      for (var foodEntry in foodLog) {
+        DateTime entryDate = DateTime.parse(foodEntry['date']);
+        if (entryDate.year == today.year &&
+            entryDate.month == today.month &&
+            entryDate.day == today.day) {
+          totalCalories += foodEntry['calories'];
+        }
       }
+      currentCaloriesIn = totalCalories;
+    }
+  }
+
+  void _onTap(int index) {
+    if (index == 0) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
     }
 
-    currentCaloriesIn = totalCalories;
+    if (index == 1) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => LogPage()));
+    }
 
-    debugPrint("Total calories consumed today: $totalCalories");
+    if (index == 2) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LearnPage()));
+    }
+
+    if (index == 3) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => ProfilePage()));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 102, 106, 219),
-        body: SingleChildScrollView(
-            child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Text(
-                      "Welcome, $_userName", // Display the fetched username
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+      appBar: AppBar(
+        title: Text("Home"),
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+      ),
+      backgroundColor: Color.fromARGB(255, 102, 106, 219),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                "Welcome, $_userName",
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 50.0),
+              Text(
+                "Calories In",
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              CustomProgressBar(
+                  currentLevel: currentCaloriesIn, goal: goalCaloriesIn),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "Current Calories In: $currentCaloriesIn",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              if (currentCaloriesIn >= goalCaloriesIn)
+                Text(
+                  "Congratulations! You met your calories in goal",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              SizedBox(height: 32),
+              Text(
+                "Calories Out",
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              CustomProgressBar(
+                  currentLevel: currentCaloriesOut, goal: goalCaloriesOut),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "Current Calories Out: $currentCaloriesOut",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              if (currentCaloriesOut > goalCaloriesOut - 100 &&
+                  currentCaloriesOut < goalCaloriesOut + 100)
+                Text(
+                  "Congratulations, you met your calorie outtake goal",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              if (currentCaloriesOut <= goalCaloriesOut - 100 ||
+                  currentCaloriesOut >= goalCaloriesOut + 100)
+                Text(
+                  "try to keep on diet",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => StatusPage()),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.asset(
+                              'assets/images/exercising.jpg',
+                              height: 150,
+                              width: 150,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 5.0,
+                            right: 15.0,
+                            child: Text(
+                              'Status',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                    Text(
-                      "Calories In",
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    CustomProgressBar(
-                        currentLevel: currentCaloriesIn, goal: goalCaloriesIn),
-                    Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text("Current Calories In: $currentCaloriesIn",
-                            style: TextStyle(fontSize: 18, color: Colors.white),
-                            textAlign: TextAlign.center)),
-                    if (currentCaloriesIn >= goalCaloriesIn)
-                      Text("Congratulations! You met your calories in goal",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                          textAlign: TextAlign.center),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      "Calories Out",
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    CustomProgressBar(
-                        currentLevel: currentCaloriesOut,
-                        goal: goalCaloriesOut),
-                    Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text("Current Calories Out: $currentCaloriesOut",
-                            style: TextStyle(fontSize: 18, color: Colors.white),
-                            textAlign: TextAlign.center)),
-                    if (currentCaloriesOut > goalCaloriesOut - 100 &&
-                        currentCaloriesOut < goalCaloriesOut + 100)
-                      Text("Congratulations, you met your calorie outtake goal",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                          textAlign: TextAlign.center),
-                    if (currentCaloriesOut <= goalCaloriesOut - 100 ||
-                        currentCaloriesOut >= goalCaloriesOut + 100)
-                      Text("try to keep on diet",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                          textAlign: TextAlign.center),
-                    SizedBox(height: 50.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              print("Status button pressed");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => StatusPage()),
-                              );
-                            },
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: Image.asset(
-                                    'assets/images/exercising.jpg',
-                                    height: 150,
-                                    width: 150,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 5.0,
-                                  right: 15.0,
-                                  child: Text(
-                                    'Status',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 40.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecommendationPage(),
+                          ),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.asset(
+                              'assets/images/exercising.jpg',
+                              height: 150,
+                              width: 150,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RecommendationPage()),
-                              );
-                            },
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: Image.asset(
-                                    'assets/images/exercising.jpg',
-                                    height: 150,
-                                    width: 150,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 5.0,
-                                  right: 15.0,
-                                  child: Text(
-                                    'Recommendation',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 40.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Positioned(
+                            bottom: 5.0,
+                            right: 15.0,
+                            child: Text(
+                              'Recommendation',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
-                ))));
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 65, 117, 33),
+        selectedItemColor: Color.fromARGB(255, 2, 50, 10),
+        unselectedItemColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        onTap: _onTap,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Log',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb),
+            label: 'Learn',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
   }
 }
