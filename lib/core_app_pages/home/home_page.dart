@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   String _userName = 'Placeholder';
   double currentCaloriesIn = 0;
-  double goalCaloriesIn = 2000;
+  double goalCaloriesIn = 500;
   double currentCaloriesOut = 0;
   double goalCaloriesOut = 2000;
   Map? userInfo;
@@ -31,7 +31,7 @@ class HomePageState extends State<HomePage> {
     Map? temp = await getUserInfo();
     setState(() {
       userInfo = temp;
-      _userName = userInfo!["Name"];
+      _userName = userInfo!["Name"].toString();
     });
 
     if (userInfo?["Height"] == 0) {
@@ -61,6 +61,10 @@ class HomePageState extends State<HomePage> {
       currentCaloriesIn = totalCalories;
     }
   }
+
+  // void setCaloriesOut(Map userInfoMap) {
+  //   if(userInfoMap['Exercises'].!)
+  // }
 
   void _onTap(int index) {
     if (index == 0) {

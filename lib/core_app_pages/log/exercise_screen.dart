@@ -114,7 +114,8 @@ class _ExercisePageState extends State<ExercisePage> {
           'Exercise': dropdownValue3,
           'Duration': dropdownValue1,
           'BPM': dropdownValue2,
-          'Calories': calories
+          'Calories': calories,
+          'date': DateTime.now().toString().substring(0, 16),
         };
 
         List<dynamic>? existingExercisesArray =
