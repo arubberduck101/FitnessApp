@@ -95,7 +95,7 @@ class HomePageState extends State<HomePage> {
         title: Text("Home"),
         backgroundColor: Color.fromARGB(255, 65, 117, 33),
       ),
-      backgroundColor: Color.fromARGB(255, 102, 106, 219),
+      backgroundColor: Color.fromARGB(255, 54, 54, 54),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -127,12 +127,23 @@ class HomePageState extends State<HomePage> {
                   textAlign: TextAlign.center,
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "Goal Calories In: $goalCaloriesIn",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               if (currentCaloriesIn >= goalCaloriesIn)
                 Text(
                   "Congratulations! You met your calories in goal",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+              ),
               SizedBox(height: 32),
               Text(
                 "Calories Out",
@@ -147,6 +158,14 @@ class HomePageState extends State<HomePage> {
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Text(
                   "Current Calories Out: $currentCaloriesOut",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "Goal Calories Out: $goalCaloriesOut",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
