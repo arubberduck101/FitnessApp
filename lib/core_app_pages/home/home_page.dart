@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intro_to_flutter/core_app_pages/profile_screen.dart';
 import 'package:intro_to_flutter/core_app_pages/log/log_page.dart';
-import 'prgoressBar.dart';
+import 'progressBar.dart';
 import '../../firebase/db.dart';
 import '../learn/learn_screen.dart';
 
