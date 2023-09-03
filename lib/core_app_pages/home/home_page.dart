@@ -141,6 +141,12 @@ class HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
+              if (currentCaloriesIn < goalCaloriesIn)
+                Text(
+                  "You should eat more",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 24),
               ),
@@ -177,10 +183,15 @@ class HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
-              if (currentCaloriesOut <= goalCaloriesOut - 100 ||
-                  currentCaloriesOut >= goalCaloriesOut + 100)
+              if (currentCaloriesOut <= goalCaloriesOut - 100)
                 Text(
-                  "try to keep on diet",
+                  "try to exercise more",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              if (currentCaloriesOut >= goalCaloriesOut + 100)
+                Text(
+                  "you are exersise too much",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
