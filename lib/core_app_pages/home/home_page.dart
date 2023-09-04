@@ -29,11 +29,6 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getUserInfo();
-    BMR = getBMR(userInfo!);
-    goalCaloriesIn = currentCaloriesOut + BMR;
-    goalCaloriesIn = currentCaloriesIn - BMR;
-
-    netCalories = currentCaloriesIn - (currentCaloriesOut + BMR);
   }
 
   _getUserInfo() async {
@@ -52,6 +47,11 @@ class HomePageState extends State<HomePage> {
       setCaloriesIn(userInfo!);
       setCaloriesOut(userInfo!);
     }
+    BMR = getBMR(userInfo!);
+    goalCaloriesIn = currentCaloriesOut + BMR;
+    goalCaloriesIn = currentCaloriesIn - BMR;
+
+    netCalories = currentCaloriesIn - (currentCaloriesOut + BMR);
   }
 
   void setCaloriesIn(Map userInfoMap) {
