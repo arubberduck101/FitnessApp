@@ -27,12 +27,13 @@ double getBMRForExerciseDuration(double weightInLbs, double heightInInches,
 
 double getActiveCalories(
     double heartRate, double weightInKg, int age, double time) {
-  // Formula : MET * 3.5 * (body weight in kg) / 200
+  // Formula for calories per minute : MET * 3.5 * (body weight in kg) / 200
 
   // MET = oxygen consump during activity / oxygen consump at rest
 
+  double intensityLevel = 11.5;
   double oxyAtRest = 3.5 * weightInKg + 10.1;
-  double oxyDuringActivity = oxyAtRest * 11.5;
+  double oxyDuringActivity = oxyAtRest * intensityLevel;
   double met = oxyDuringActivity / oxyAtRest;
 
   double activeCaloriesPerMinute = met * 3.5 * weightInKg / 200.0;

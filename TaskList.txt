@@ -21,11 +21,11 @@ Task List (Project elements)
 
 NEW TASKS
 
-1) On Home Page, load up the calories out from database
+1) On Home Page, load up the calories out from database. DONE
 
-2) On Profile Page, allow user to delete their account 
+2) On Profile Page, allow user to delete their account. DONE
 
-3) On Video Page, add more videos so that we have each body part
+3) On Video Page, add more videos so that we have each body part. DONE
 
 4) In general, change these pictures/backgrounds to look good.
     a) Remember to add the image to the assets/images folder.

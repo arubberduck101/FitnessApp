@@ -51,7 +51,7 @@ class HomePageState extends State<HomePage> {
     goalCaloriesIn = BMR;
     goalCaloriesOut = BMR;
 
-    netCalories = currentCaloriesIn - (currentCaloriesOut + BMR);
+    netCalories = currentCaloriesIn - (currentCaloriesOut);
   }
 
   void setCaloriesIn(Map userInfoMap) {
