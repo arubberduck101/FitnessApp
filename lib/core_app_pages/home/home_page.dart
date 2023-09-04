@@ -49,7 +49,7 @@ class HomePageState extends State<HomePage> {
     }
     BMR = getBMR(userInfo!);
     goalCaloriesIn = currentCaloriesOut + BMR;
-    goalCaloriesIn = currentCaloriesIn - BMR;
+    goalCaloriesOut = (currentCaloriesIn - BMR).abs();
 
     netCalories = currentCaloriesIn - (currentCaloriesOut + BMR);
   }

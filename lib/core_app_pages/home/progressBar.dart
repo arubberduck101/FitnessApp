@@ -7,10 +7,9 @@ class CustomProgressBar extends StatelessWidget {
   CustomProgressBar({required this.currentLevel, required this.goal});
 
   double calculateProgress(double currentLevel, double goal) {
-    if (currentLevel > goal) {
-      return 1.0;
-    }
-    return currentLevel / goal;
+    double progressPercentage = currentLevel / goal;
+    return progressPercentage.clamp(
+        0.0, 1.0); // Clamp the value between 0.0 and 1.0
   }
 
   @override
