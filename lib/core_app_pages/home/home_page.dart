@@ -4,6 +4,7 @@ import 'package:intro_to_flutter/core_app_pages/log/log_page.dart';
 import 'progressBar.dart';
 import '../../firebase/db.dart';
 import '../learn/learn_screen.dart';
+import '../log/exercise_to_calories_function.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,16 +16,24 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   String _userName = 'Placeholder';
   double currentCaloriesIn = 0;
-  double goalCaloriesIn = 500;
   double currentCaloriesOut = 0;
-  double goalCaloriesOut = 2000;
+  double BMR = 0;
+  double goalCaloriesIn = 0;
+
+  double goalCaloriesOut = 0;
   Map? userInfo;
   String? username;
 
+  double netCalories = 0;
   @override
   void initState() {
     super.initState();
     _getUserInfo();
+    BMR = getBMR(userInfo!);
+    goalCaloriesIn = currentCaloriesOut + BMR;
+    goalCaloriesIn = currentCaloriesIn - BMR;
+
+    netCalories = currentCaloriesIn - (currentCaloriesOut + BMR);
   }
 
   _getUserInfo() async {
@@ -61,6 +70,27 @@ class HomePageState extends State<HomePage> {
       }
       currentCaloriesIn = totalCalories;
     }
+  }
+
+  double getBMR(Map userInfo) {
+    double bmr = 0;
+
+    double weightInPounds = userInfo["Weight"];
+    double weightInKg = poundsToKilograms(weightInPounds);
+
+    double heightInInches = userInfo["Height"];
+    double heightInCm = inchesToCentimeters(heightInInches);
+    String gender = userInfo["Gender"];
+    int age = userInfo["Age"];
+    if (gender == "Male") {
+      bmr =
+          88.362 + (weightInKg * 13.397) + (4.799 * heightInCm) - (5.677 * age);
+    } else {
+      bmr =
+          447.593 + (weightInKg * 9.247) + (3.098 * heightInCm) - (4.330 * age);
+    }
+
+    return bmr;
   }
 
   void setCaloriesOut(Map userInfoMap) {
@@ -211,10 +241,24 @@ class HomePageState extends State<HomePage> {
                   textAlign: TextAlign.center,
                 ),
               SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [],
-              )
+              if (netCalories > 0)
+                Text(
+                  "you gained " + netCalories.toString() + " extra calories",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              if (netCalories < 0)
+                Text(
+                  "you burned " + netCalories.toString() + " extra calories",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              if (netCalories == 0)
+                Text(
+                  "Good control of your calories!",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
             ],
           ),
         ),
