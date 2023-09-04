@@ -26,25 +26,38 @@ double getBMRForExerciseDuration(double weightInLbs, double heightInInches,
 }
 
 double getActiveCalories(
-    double heartRate, double weightInLbs, int age, double time) {
-  double weightInKg = poundsToKilograms(weightInLbs);
-  double calories =
-      (((heartRate - 80) * 1.0) / ((220 - age) * 1.0)) * weightInKg;
-  double totalCalories = calories * time;
-  return totalCalories;
+    double heartRate, double weightInKg, int age, double time) {
+  // Formula : MET * 3.5 * (body weight in kg) / 200
+
+  // MET = oxygen consump during activity / oxygen consump at rest
+
+  double oxyAtRest = 3.5 * weightInKg + 10.1;
+  double oxyDuringActivity = oxyAtRest * 11.5;
+  double met = oxyDuringActivity / oxyAtRest;
+
+  double activeCaloriesPerMinute = met * 3.5 * weightInKg / 200.0;
+  double activeCalories = activeCaloriesPerMinute * time;
+  return activeCalories;
 }
 
 double exerciseToCalories(double heightInInches, double weightInLbs,
     double minutesExercised, double bpm, int age, String gender) {
-  double calories;
+  double weightInKg = poundsToKilograms(weightInLbs);
+  double heightInCm = inchesToCentimeters(heightInInches);
 
-  calories = getBMRForExerciseDuration(
-          weightInLbs, heightInInches, age, gender, minutesExercised) +
-      getActiveCalories(bpm, weightInLbs, age, minutesExercised);
+  double bmr = getBMRForExerciseDuration(
+      weightInKg, heightInCm, age, gender, minutesExercised);
+  double activeCalories =
+      getActiveCalories(bpm, weightInKg, age, minutesExercised);
 
-  return calories;
+  return bmr + activeCalories;
 }
 
 void main() {
-  print(exerciseToCalories(70, 147, 60, 110, 20, "Male"));
+  double height = 71;
+  double weight = 140;
+  double mins = 60;
+  double bpm = 0;
+  int age = 70;
+  print(exerciseToCalories(height, weight, mins, bpm, age, "Male"));
 }

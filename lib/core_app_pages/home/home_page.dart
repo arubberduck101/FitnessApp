@@ -41,6 +41,7 @@ class HomePageState extends State<HomePage> {
       );
     } else {
       setCaloriesIn(userInfo!);
+      setCaloriesOut(userInfo!);
     }
   }
 
@@ -62,9 +63,23 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  // void setCaloriesOut(Map userInfoMap) {
-  //   if(userInfoMap['Exercises'].!)
-  // }
+  void setCaloriesOut(Map userInfoMap) {
+    if (userInfoMap['Exercises'].length != 0) {
+      List<dynamic> Exercises = userInfoMap['Exercises'];
+      double totalCalories = 0;
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+      for (var exerciseEntry in Exercises) {
+        DateTime entryDate = DateTime.parse(exerciseEntry['date']);
+        if (entryDate.year == today.year &&
+            entryDate.month == today.month &&
+            entryDate.day == today.day) {
+          totalCalories += exerciseEntry['Calories'];
+        }
+      }
+      currentCaloriesOut = totalCalories;
+    }
+  }
 
   void _onTap(int index) {
     if (index == 0) {
