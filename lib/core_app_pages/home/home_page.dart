@@ -48,8 +48,8 @@ class HomePageState extends State<HomePage> {
       setCaloriesOut(userInfo!);
     }
     BMR = getBMR(userInfo!);
-    goalCaloriesIn = BMR;
-    goalCaloriesOut = BMR;
+    goalCaloriesIn = double.parse(BMR.toStringAsFixed(0));
+    goalCaloriesOut = double.parse(BMR.toStringAsFixed(0));
 
     netCalories = currentCaloriesIn - currentCaloriesOut;
   }
@@ -68,7 +68,7 @@ class HomePageState extends State<HomePage> {
           totalCalories += foodEntry['calories'];
         }
       }
-      currentCaloriesIn = totalCalories;
+      currentCaloriesIn = double.parse(totalCalories.toStringAsFixed(0));
     }
   }
 
@@ -107,7 +107,7 @@ class HomePageState extends State<HomePage> {
           totalCalories += exerciseEntry['Calories'];
         }
       }
-      currentCaloriesOut = totalCalories;
+      currentCaloriesOut = double.parse(totalCalories.toStringAsFixed(0));
     }
   }
 
@@ -250,7 +250,9 @@ class HomePageState extends State<HomePage> {
                 ),
               if (netCalories < 0)
                 Text(
-                  "you burned " + netCalories.toString() + " extra calories",
+                  "you burned " +
+                      netCalories.abs().toString() +
+                      " extra calories",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),

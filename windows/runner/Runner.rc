@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "intro_to_flutter" "\0"
+            VALUE "FileDescription", "AI Fitness Tracker" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "intro_to_flutter" "\0"
+            VALUE "InternalName", "AI Fitness Tracker" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "intro_to_flutter.exe" "\0"
-            VALUE "ProductName", "intro_to_flutter" "\0"
+            VALUE "ProductName", "AI Fitness Tracker" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
